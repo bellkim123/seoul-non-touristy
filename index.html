@@ -175,6 +175,20 @@
   .sub-h3{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.02em;margin:32px 0 12px;display:flex;align-items:baseline;gap:10px}
   .sub-h3 .k{font-size:13px;font-weight:600;color:var(--ink-mute);font-family:'Noto Sans KR',sans-serif;letter-spacing:0}
 
+  /* ── Day pills ─────────────────────────────────── */
+  .day-pills{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}
+  .day-pill{padding:10px 18px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;transition:all .15s;min-width:96px}
+  .day-pill:hover{border-color:var(--ink);transform:translateY(-1px)}
+  .day-pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .day-pill .pdate{font-family:'Inter',sans-serif;font-weight:900;font-size:14px;letter-spacing:-.02em;line-height:1}
+  .day-pill .plabel{font-size:10.5px;color:var(--ink-mute);font-weight:600;letter-spacing:.02em}
+  .day-pill.active .plabel{color:rgba(255,255,255,.7)}
+  .day-pill.bonus{border-style:dashed;background:var(--bg-soft)}
+  .day-pill.bonus.active{background:var(--pink);color:#fff;border-color:var(--pink);border-style:solid}
+  .day-pill.bonus.active .plabel{color:rgba(255,255,255,.85)}
+  .day-panel{display:none}
+  .day-panel.active{display:block}
+
   /* ── Tips ─────────────────────────────────── */
   .tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
   .tip{padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px}
@@ -228,7 +242,7 @@
     <nav class="nav" id="topNav">
       <button data-tab="home" class="active">Browse</button>
       <button data-tab="map">Map</button>
-      <button data-tab="day1">5/1 서울숲</button>
+      <button data-tab="itin">Itinerary</button>
       <button data-tab="tips">Tips</button>
     </nav>
   </div>
@@ -347,15 +361,25 @@
   </section>
 </div>
 
-<!-- ─── Tab: DAY 1 ─── -->
-<div class="tab-content" id="tab-day1">
+<!-- ─── Tab: ITINERARY ─── -->
+<div class="tab-content" id="tab-itin">
   <section>
     <div class="sec-head">
       <div class="sec-title">
-        <h2><span class="num">03</span>5/1 (금) — 성수·서울숲</h2>
-        <p>강남 자택 → 성수·서울숲 → 뚝섬한강 → 강남 복귀</p>
+        <h2><span class="num">03</span>Itinerary</h2>
+        <p>강남 자택 베이스 · 4일 코스 · 히든·로컬 위주</p>
       </div>
     </div>
+
+    <div class="day-pills" id="dayPills">
+      <button class="day-pill active" data-day="d1"><span class="pdate">5/1 FRI</span><span class="plabel">성수 · 서울숲</span></button>
+      <button class="day-pill" data-day="d2"><span class="pdate">5/2 SAT</span><span class="plabel">강북 히든</span></button>
+      <button class="day-pill" data-day="d3"><span class="pdate">5/3 SUN</span><span class="plabel">연남 · 망원</span></button>
+      <button class="day-pill bonus" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실한강 (보너스)</span></button>
+    </div>
+
+    <!-- ───── Day 1 ───── -->
+    <div class="day-panel active" id="panel-d1">
 
     <div class="d1-stats">
       <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 22:00</div><div class="sub">약 12시간</div></div>
@@ -426,6 +450,177 @@
         <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>짐 권장</b>: 가벼운 자켓 (5월 초 일교차 큼), 우산 (5월 평균 강수일 8일), 보조배터리, 텀블러 (어니언 할인).</li>
       </ul>
     </div>
+    </div><!-- /panel-d1 -->
+
+    <!-- ───── Day 2 ───── -->
+    <div class="day-panel" id="panel-d2">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 23:30</div><div class="sub">약 13시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~9 km</div><div class="sub">부암동 + 북촌 + 골목 다회</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩140k</div><div class="sub">식음+체험+택시</div></div>
+        <div class="d1-stat"><div class="lab">교통비</div><div class="val">₩28,000</div><div class="sub">지하철+버스+심야 택시</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">강북 히든</div><div class="sub">부암 → 익선 → 을지로</div></div>
+      </div>
+
+      <h3 class="sub-h3">사전 체크 <span class="k">— 5/2 토요일은 한복·익선동 혼잡</span></h3>
+      <div class="booking">
+        <div class="bk urgent">
+          <span class="when">D-3 · 한복</span>
+          <span class="what">한복남 또는 한복생활 4시간</span>
+          <span class="how">5/2(토) 워크인 2시간 대기 가능. Klook 8% 할인 + 정통 한복 → 5대궁 무료 입장.</span>
+        </div>
+        <div class="bk urgent">
+          <span class="when">D-14 · 창덕궁 후원</span>
+          <span class="what">한국어 가이드 13:30/14:30</span>
+          <span class="how">cha.go.kr 사전 예약 (한국 휴대폰 인증). 비원 가이드 동반 입장.</span>
+        </div>
+        <div class="bk">
+          <span class="when">D-Day · 시간 알람</span>
+          <span class="what">북촌 가회동 16:30 컷</span>
+          <span class="how">17:00 진입 통제. 16:30까지 진입해야 사진 컷 + 100,000원 과태료 회피.</span>
+        </div>
+        <div class="bk">
+          <span class="when">D-Day · 식당 워크인</span>
+          <span class="what">청수당·머리조심 줄서기</span>
+          <span class="how">CatchTable 한국폰 인증 OK라면 미리. 안 되면 워크인 + 텔레그램 대기 시스템.</span>
+        </div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 부암 ▸ 북촌 ▸ 익선 ▸ 을지로</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">10:00<span class="dur">~40분</span></div><div class="tl-body"><div class="tl-place">강남 → 경복궁역 → 1020번 부암동행 <span class="en">3호선 + bus</span></div><div class="tl-note">지하철 25분 + 버스 10분. 경복궁역 3번출구 → 자하문터널 방향.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">10:40<span class="dur">~80분</span></div><div class="tl-body"><div class="tl-place">백사실 계곡 산책 <span class="en">Baeksasil Valley</span></div><div class="tl-note">도심에서 도보 30분 거리에 진짜 계곡. 도롱뇽 서식지. 5월 신록 압권. 무장애길 X (운동화).</div><div class="tl-meta"><span class="cost">무료</span><span>시그니처</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">산모퉁이 카페 점심 <span class="en">Sanmotoonge Cafe</span></div><div class="tl-note">〈커피프린스 1호점〉 촬영지. 부암동 산자락 뷰. 브런치 + 커피.</div><div class="tl-meta"><span class="cost">~₩18,000</span><span>1인 OK</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">13:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">환기미술관 <span class="en">Whanki Museum</span></div><div class="tl-note">한국 추상화 거장 김환기. 부암동 조용한 골목. 월 휴무 (5/2 토 정상).</div><div class="tl-meta"><span class="cost">₩18,000</span><span>월 휴무</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">15:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">부암동 → 안국역 → 삼청동 <span class="en">bus + walk</span></div><div class="tl-note">1020번 버스로 경복궁 → 도보 10분 또는 안국역 환승.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">삼청동 팔판길 + MMCA <span class="en">Samcheong Palpan-gil + MMCA</span></div><div class="tl-note">메인 거리 말고 팔판길. 진짜 로컬 한옥 카페. 시간 남으면 MMCA 서울관 (수·토 21시까지).</div><div class="tl-meta"><span class="cost">MMCA ₩4,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">16:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">북촌 가회동 31번지 <span class="en">Bukchon 31 — 17시 컷!</span></div><div class="tl-note"><b>17:00 진입 통제 (₩100,000 과태료).</b> 16:30 진입 → 사진 1~2컷 → 17:00 정시 퇴장.</div><div class="tl-meta"><span class="cost">무료</span><span>10–17시만</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">백인제 가옥 <span class="en">Baek In-je House</span></div><div class="tl-note">1913 한옥+일본식 복도 하이브리드. 18시 마감.</div><div class="tl-meta"><span class="cost">무료</span><span>~18:00</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">서순라길 산책 <span class="en">Seosulla-gil</span></div><div class="tl-note">종묘 동쪽 돌담 1km. 한옥 카페·주얼리 골목. 북촌 빠진 한적함 보충.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">익선동 — 청수당 또는 마당플라워 <span class="en">Ikseondong</span></div><div class="tl-note">한옥 골목 미로 진입. 도깨비 촬영지. 청수당 (수플레 카스테라) 또는 마당플라워 (꽃 마당).</div><div class="tl-meta"><span class="cost">~₩15,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">20:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">아트몬스터 익선동 — 한옥 수제맥주 <span class="en">Art Monster</span></div><div class="tl-note">한옥에서 마시는 수상 경력 수제맥주. 익선동 야간 코어. 공기 좋은 평상.</div><div class="tl-meta"><span class="cost">맥주 ₩9,000~</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">21:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">익선동 → 을지로3가 <span class="en">walk · 800m</span></div><div class="tl-note">도보로 충분. 종로3가 → 청계천 → 을지로 골목 진입.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">21:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">을지로 노가리 골목 <span class="en">Euljiro Nogari Alley</span></div><div class="tl-note">을지OB베어. 1980 시작 호프 거리. 노가리 ₩2,000 + 생맥주 ₩4,000.</div><div class="tl-meta"><span class="cost">~₩12,000</span><span>현금 OK</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">22:30<span class="dur">~50분</span></div><div class="tl-body"><div class="tl-place">머리조심 비밀 바 <span class="en">Meorijosim</span></div><div class="tl-note">셔터 내린 작은 문 → 머리 숙여 입장. 또는 세운상가 옥상 (무료 야경).</div><div class="tl-meta"><span class="cost">칵테일 ₩16,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">23:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Taxi · ~₩20,000</span></div><div class="tl-note">막차 시간 가까움. 카카오T 또는 지하철 2호선 환승.</div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 5/2 권역 17곳</span></h3>
+      <div class="grid" id="day2Grid"></div>
+
+      <h3 class="sub-h3">5/2 메모</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>북촌 17시 컷</b>: 가회동 일부 골목 17:00 이후 진입 시 ₩100,000 과태료. 16:30 진입 → 빠른 사진 → 정시 퇴장.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>한복은 옵션</b>: 본문에는 안 넣었지만, 부암동 대신 한복+경복궁 09:30 직행 코스도 가능. 한복 입은 채로 익선동·서순라길 이동 OK.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>5/2 토요일 익선동</b>은 18~21시가 피크. 청수당·온천집 워크인 1시간 대기 흔함. 18:30 도착 → 19:00 자리 노림.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>강남 복귀 23~24시</b>: 막차 직전 또는 직후. 카카오T 호출 (강남↔을지로 약 20,000원).</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때 Plan B</b>: 부암동 대신 MMCA 서울관 (수·토 21시까지) 또는 리움미술관 (한남) 종일.</li>
+        </ul>
+      </div>
+    </div><!-- /panel-d2 -->
+
+    <!-- ───── Day 3 ───── -->
+    <div class="day-panel" id="panel-d3">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">11:00 → 19:30</div><div class="sub">~8.5시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~7 km</div><div class="sub">경의선숲길 + 망원시장</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩70k</div><div class="sub">가벼운 마무리 모드</div></div>
+        <div class="d1-stat"><div class="lab">교통비</div><div class="val">₩4,500</div><div class="sub">2호선 왕복</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">조용한 마무리</div><div class="sub">로컬 동네 + 한강 노을</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 연남 ▸ 망원 ▸ 한강</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">11:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">강남역 → 홍대입구역 <span class="en">Line 2 · 1,500₩</span></div><div class="tl-note">2호선 직통 25분. 3번 출구 → 경의선숲길 시작점.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">11:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">경의선숲길 산책 <span class="en">Gyeongui Line Forest Park</span></div><div class="tl-note">폐선 철도 6.3km 선형 공원. 5월 신록 베스트. 연트럴파크 풀밭에서 사진.</div><div class="tl-meta"><span class="cost">무료</span><span>도보 1.5km</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">카페 테텀 <span class="en">Cafe Teteum</span></div><div class="tl-note">빨간안경 곰 시그니처. 굿즈샵 겸 카페. 연남 메인 카페.</div><div class="tl-meta"><span class="cost">₩7,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">13:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">연남·연희 점심 <span class="en">Yeonnam / Yeonhui</span></div><div class="tl-note">연남 부근 브런치 또는 연희동 피터팬 1978 베이커리. 5월 야외 좌석 추천.</div><div class="tl-meta"><span class="cost">~₩15,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:45<span class="dur">~45분</span></div><div class="tl-body"><div class="tl-place">유어마인드 서점 <span class="en">Your Mind</span></div><div class="tl-note">한국 인디 출판의 메카. 사진집·에세이 큐레이션. 수 휴무 (5/3 일 정상).</div><div class="tl-meta"><span class="cost">무료 입장</span><span>수 휴무</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">15:30<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">연남 → 망원 <span class="en">walk · 25분 또는 6호선 한 정거장</span></div><div class="tl-note">날씨 좋으면 도보 추천 — 연남에서 망원 동네 분위기 변화 체감.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">16:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">망원시장 <span class="en">Mangwon Market</span></div><div class="tl-note">진짜 동네 시장. 고로케·꽈배기·닭강정. 로컬:관광객 7:3. 5/3 일 정상 영업.</div><div class="tl-meta"><span class="cost">~₩10,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:00<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">망원한강공원 일몰 <span class="en">Mangwon Hangang Park</span></div><div class="tl-note">5월 초 일몰 19:25. 시장에서 캔맥주·돗자리. 한강 + 자전거 + 라이브.</div><div class="tl-meta"><span class="cost">~₩10,000</span><span>일몰</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">19:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">망원 → 강남 복귀 <span class="en">6호선 + 9호선 또는 택시</span></div><div class="tl-note">막차 시간 여유. 6호선 망원 → 합정 환승 → 9호선 강남.</div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 5/3 권역 5곳</span></h3>
+      <div class="grid" id="day3Grid"></div>
+
+      <h3 class="sub-h3">5/3 메모</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>5/3 일요일 휴무 회피</b>: 광장시장 빈티지관 일부 / 남대문 다수 / 북촌11길 메인 출입제한. 연남·망원·연희 코스가 휴무 영향 거의 없음.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>대안 코스</b>: A. 한남·해방촌·경리단길 (글로벌 동네, 옥상 카페·바). B. 성수 (5/1에 못 본 LCDC, 대림창고).</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>망원시장 결제</b>: 일부 가게는 현금만. 5만원 이하 준비. 마진 적어 카드 단말기 없는 노포 多.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때 Plan B</b>: 더현대 서울 (여의도, 5F Sounds Forest 실내 정원) → 강남 복귀.</li>
+        </ul>
+      </div>
+    </div><!-- /panel-d3 -->
+
+    <!-- ───── Day 5 (Bonus) ───── -->
+    <div class="day-panel" id="panel-d5">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">18:00 → 22:30</div><div class="sub">저녁만 ~4.5시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~3 km</div><div class="sub">한강+석촌호수 산책</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩45k</div><div class="sub">한강 치맥+카페</div></div>
+        <div class="d1-stat"><div class="lab">교통비</div><div class="val">₩3,000</div><div class="sub">2호선 왕복</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">어린이날 야경</div><div class="sub">한강 + 롯데타워</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 잠실한강 ▸ 석촌호수 야경</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">18:00<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">강남역 → 잠실역 <span class="en">Line 2 · 1,500₩</span></div><div class="tl-note">2호선 직통 5정거장. 잠실역 3·4번 출구 → 한강공원 입구.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:15<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">잠실한강공원 산책 + 일몰 <span class="en">Jamsil Hangang Park</span></div><div class="tl-note">5/5 어린이날 = 가족 인파. 잠실 측은 반포보다 한적. 자전거 대여 (1시간 ~₩3,000) 옵션.</div><div class="tl-meta"><span class="cost">무료</span><span>일몰 19:30</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">한강 치맥 (배달) <span class="en">Banmin delivery</span></div><div class="tl-note">배민 → 잠실한강 Zone 번호 입력. 교촌·BBQ·BHC 모두 배달. 라면 자판기 GS25 잠실지구점.</div><div class="tl-meta"><span class="cost">~₩30,000</span><span>치킨+맥주</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">20:45<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">잠실한강 → 석촌호수 <span class="en">walk · 1.2km</span></div><div class="tl-note">잠실 종합운동장 방향 도보. 또는 잠실역 1번 출구 → 도보 5분.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">21:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">석촌호수 야경 산책 <span class="en">Seokchon Lake</span></div><div class="tl-note">롯데타워 호수 반영 야경 시그니처. 둘레 2.5km. 어린이날 분수쇼·라이팅 가능 (확인).</div><div class="tl-meta"><span class="cost">무료</span><span>외국인 잘 모름</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">22:00<span class="dur">옵션</span></div><div class="tl-body"><div class="tl-place">옵션 — 롯데타워 SEOUL SKY <span class="en">Lotte World Tower</span></div><div class="tl-note">118층 478m 유리바닥. 22시 라스트 입장. 야경만 노린다면 21:30 입장.</div><div class="tl-meta"><span class="cost">₩21,000~</span><span>~22:00</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">22:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Line 2 · 1,500₩</span></div><div class="tl-note">잠실역 2호선 막차 늦은 편 (~24시).</div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 잠실 권역 3곳</span></h3>
+      <div class="grid" id="day5Grid"></div>
+
+      <h3 class="sub-h3">5/5 메모</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>5/5 어린이날</b> = 법정공휴일. 가족 인파 → 잠실 한강·롯데월드 매우 혼잡. <b>저녁 18시 이후 진입</b>이 베스트 (낮 피크 회피).</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>잠실 vs 반포</b>: 잠실 한강은 강남에서 5분 + 한적. 반포는 무지개분수 명물이지만 5/5 가족 인파 절정. 잠실 추천.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>석촌호수</b>는 외국인 가이드북에 잘 안 나옴. 롯데타워 + 호수 + 야경 — 인생샷 스팟.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>SEOUL SKY 야간</b>: 21시 이후 입장권 할인 (시즌별). 22시 라스트 입장 → 30분 관람 → 22:30 하차.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때 Plan B</b>: 롯데월드몰 (실내) → 더 라운지 카페 (롯데타워 31층 무료 전망) → 가락몰 야시장.</li>
+        </ul>
+      </div>
+    </div><!-- /panel-d5 -->
+
   </section>
 </div>
 
@@ -581,6 +776,11 @@ const SPOTS=[
   // ===== 광장시장 / 식음 =====
   {id:41,ko:"광장시장",en:"Gwangjang Market",area:"종로",cat:["food","hidden"],lat:37.5704,lng:127.0027,price:"₩3,000~24,000",hours:"09:00–22:00 (일 일부 휴)",hook:"마약김밥·빈대떡·육회. 카드 OK (2023~). 5/3 일부 휴무 주의.",glyph:"廣",coverSub:"MARKET",cover:"c-amber",mapsQ:"Gwangjang Market Seoul"},
   {id:42,ko:"하동관 명동",en:"Hadongkwan",area:"명동",cat:["food"],lat:37.5631,lng:126.9849,price:"곰탕 ₩16,000",hours:"07:00–16:00 (4시 마감!)",hook:"1939 노포. Michelin Bib Gourmand. 1인 카운터 원조.",glyph:"河",coverSub:"GOMTANG",cover:"c-amber",badge:"16시 마감",mapsQ:"Hadongkwan Myeongdong"},
+
+  // ===== 5/5 잠실 권역 =====
+  {id:43,ko:"잠실한강공원",en:"Jamsil Hangang Park",area:"잠실",cat:["night","hidden"],lat:37.5197,lng:127.0855,price:"무료",hours:"24시간",hook:"한강·롯데타워 야경 한 컷. 자전거·돗자리·치맥 배달 가능. 강남 5분.",glyph:"漢",cover:"c-blue",badge:"5/5 저녁",mapsQ:"Jamsil Hangang Park",day5:true,featured:true},
+  {id:44,ko:"석촌호수",en:"Seokchon Lake",area:"잠실",cat:["night","hidden"],lat:37.5079,lng:127.1015,price:"무료",hours:"24시간",hook:"롯데타워 호수 반영 야경. 둘레 2.5km 산책로. 외국인 잘 모르는 야경.",glyph:"湖",coverSub:"SEOKCHON",cover:"c-night",mapsQ:"Seokchon Lake",day5:true},
+  {id:45,ko:"롯데월드타워 SEOUL SKY",en:"Lotte World Tower SEOUL SKY",area:"잠실",cat:["night","culture"],lat:37.5126,lng:127.1027,price:"₩21,000~",hours:"10:30–22:00",hook:"118층 478m 유리바닥 전망대. 야간 입장 추천.",glyph:"555",coverSub:"SKY",cover:"c-night",mapsQ:"Lotte World Tower",day5:true},
 ];
 
 // ──────────────────────────────────────────
@@ -636,8 +836,27 @@ document.getElementById("catChips").addEventListener("click",e=>{
   applyFilter(btn.dataset.cat);
 });
 
-// Day1 grid
-document.getElementById("day1Grid").innerHTML=SPOTS.filter(s=>s.day1).map(s=>renderCard(s)).join("");
+// Day grids — render by day-flag fields
+const DAY_FILTERS={
+  day1:s=>s.day1===true,
+  day2:s=>[20,21,22,23,24,25,26,18,19,10,11,12,13,14,15,16,17].includes(s.id),
+  day3:s=>[27,28,29,30,31].includes(s.id),
+  day5:s=>s.day5===true
+};
+["day1","day2","day3","day5"].forEach(d=>{
+  const el=document.getElementById(d+"Grid");
+  if(el)el.innerHTML=SPOTS.filter(DAY_FILTERS[d]).map(s=>renderCard(s)).join("");
+});
+
+// Day pill switcher (within Itinerary tab)
+document.getElementById("dayPills").addEventListener("click",e=>{
+  const btn=e.target.closest(".day-pill");if(!btn)return;
+  document.querySelectorAll("#dayPills .day-pill").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".day-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+btn.dataset.day).classList.add("active");
+  window.scrollTo({top:document.getElementById("tab-itin").offsetTop-60,behavior:"smooth"});
+});
 
 // ──────────────────────────────────────────
 // TAB SWITCHING
