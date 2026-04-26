@@ -369,12 +369,38 @@
     <div class="sec-head">
       <div class="sec-title">
         <h2><span class="num">02</span>Map</h2>
-        <p>모든 스팟 한눈에 — 핀 클릭 시 상세</p>
+        <p>스팟 마커 + Trip별 동선 노선 — 위에서 Trip · 날짜 선택</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div style="display:flex;gap:4px;background:var(--bg-soft);padding:5px;border-radius:10px">
+        <button class="map-trip-btn active" data-trip="all">All</button>
+        <button class="map-trip-btn" data-trip="A">Trip A</button>
+        <button class="map-trip-btn" data-trip="B">Trip B</button>
+        <button class="map-trip-btn" data-trip="C">Trip C</button>
+      </div>
+      <div style="display:flex;gap:4px;background:var(--bg-soft);padding:5px;border-radius:10px" id="mapDayBtns">
+        <button class="map-day-btn active" data-day="all">전체</button>
+        <button class="map-day-btn" data-day="d1">5/1</button>
+        <button class="map-day-btn" data-day="d2">5/2</button>
+        <button class="map-day-btn" data-day="d3">5/3</button>
+        <button class="map-day-btn" data-day="d5">5/5</button>
       </div>
     </div>
     <div id="mapHolder"></div>
+    <div id="routeInfo" style="margin-top:14px;padding:14px 18px;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:12.5px;color:var(--ink-soft);display:none">
+      <span id="routeLabel"></span>
+    </div>
   </section>
 </div>
+<style>
+  .map-trip-btn,.map-day-btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:700;color:var(--ink-soft);background:transparent;cursor:pointer;transition:all .15s}
+  .map-trip-btn:hover,.map-day-btn:hover{color:var(--ink);background:rgba(255,255,255,.6)}
+  .map-trip-btn.active,.map-day-btn.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+  .map-trip-btn[data-trip="A"].active{color:var(--pink-deep)}
+  .map-trip-btn[data-trip="B"].active{color:var(--blue)}
+  .map-trip-btn[data-trip="C"].active{color:var(--red)}
+</style>
 
 <!-- ─── Tab: TRIP A ─── -->
 <div class="tab-content" id="tab-tripA">
@@ -713,11 +739,47 @@
       <button class="day-pill" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실 드론쇼</span></button>
     </div>
 
-    <!-- Trip B / Day 1 (공통) -->
+    <!-- Trip B / Day 1 -->
     <div class="day-panel active" data-day="d1" id="panel-B-d1">
-      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
-        <b>5/1 (금) 성수·서울숲</b>은 모든 Trip 공통입니다. 자세한 시간대별 동선은 <b>Trip A</b> 탭을 참고하세요. 아래는 권역 핵심 스팟.
+      <div style="padding:14px 18px;background:var(--pink-soft);border-radius:12px;font-size:12.5px;color:var(--pink-deep);margin-bottom:18px;font-weight:600">
+        ★ 5/1 anchor: <b>서울숲</b> 방문은 모든 Trip 공통. 그 외 동선은 Trip별로 다름.
       </div>
+
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">09:00 → 23:30</div><div class="sub">~14.5시간</div></div>
+        <div class="d1-stat"><div class="lab">앵커</div><div class="val">서울숲</div><div class="sub">15:00 진입</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">압구정 → 서울숲 → 해방촌</div><div class="sub">강남 럭셔리 + 글로벌 야간</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩140k</div><div class="sub">카페+디너+옥상바</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 압구정 ▸ 서울숲 ▸ 해방촌</span></h3>
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">도산공원 + 압구정 카페 <span class="en">Dosan Park</span></div><div class="tl-note">강남 자택 도보 / 5분 거리. 셀럽 단골 카페 골목 모닝.</div><div class="tl-meta"><span class="cost">~₩10,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">11:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">젠틀몬스터 신사 <span class="en">Gentle Monster Sinsa Flagship</span></div><div class="tl-note">선글라스 매장이 아니라 SF 미술관. 시즌 인스톨레이션. K-pop 화보 단골.</div><div class="tl-meta"><span class="cost">무료 입장</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">12:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">압구정 → 서울숲 <span class="en">분당선 + walk</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:30<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">서울숲 LCDC 점심 <span class="en">LCDC Seoul</span></div><div class="tl-note">라이프스타일 콤플렉스 안 브런치. 1인 OK. 디자이너 셀렉트숍 같이.</div><div class="tl-meta"><span class="cost">₩18,000~25,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:00<span class="dur">~150분</span></div><div class="tl-body"><div class="tl-place" style="color:var(--pink-deep);font-weight:900">★ 서울숲 + 포켓몬 메가 페스타 <span class="en">Seoul Forest + Pokémon Festa</span></div><div class="tl-note">5/1 오프닝 데이. 사슴 방사장 + 비밀의 숲(포켓몬) + 정원박람회 신록. 평일 오후가 그나마 한가.</div><div class="tl-meta"><span class="cost">무료</span><span>★ ANCHOR</span><span>5/1 한정</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">16:30<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">서울숲 → 한남 <span class="en">택시 ~₩12,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">한남 마지셔우드 카페 <span class="en">Margesherwood</span></div><div class="tl-note">한국 가죽 가방 플래그십 + 카페. 한남대로 골목 분위기.</div><div class="tl-meta"><span class="cost">커피 ₩7,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">18:15<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">한남 → 해방촌 <span class="en">walk · 1.2km</span></div><div class="tl-note">남산 자락 골목 도보. 분위기 좋음.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:30<span class="dur">~45분</span></div><div class="tl-body"><div class="tl-place">해방촌 108계단 노을 <span class="en">Haebangchon 108 Stairs</span></div><div class="tl-note">5월 일몰 19:25. 산동네 108계단 + 마을 뷰 + 남산 정면.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">해방촌 디너 <span class="en">HBC Dinner</span></div><div class="tl-note">신흥로 글로벌 식당. 영문 메뉴 100%. 멕시칸·이탈리안·튀르키예.</div><div class="tl-meta"><span class="cost">~₩40,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">21:00<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">늘담 옥상 또는 Privilege Mondrian <span class="en">Nuldam / Privilege</span></div><div class="tl-note">늘담 = 한강+남산+도심 3방향 옥상. Privilege = Mondrian 호텔 옥상 360°.</div><div class="tl-meta"><span class="cost">₩15,000~25,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">23:30<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Taxi ~₩14,000</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 압구정 + 성수 + 한남·해방촌 mix</span></h3>
       <div class="grid" id="B-day1Grid"></div>
     </div>
 
@@ -846,11 +908,47 @@
       </div>
     </div><!-- /panel-B-d3 -->
 
-    <!-- Trip B / Day 5 (공통) -->
+    <!-- Trip B / Day 5 -->
     <div class="day-panel" data-day="d5" id="panel-B-d5">
-      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
-        <b>5/5 (화) 잠실 드론쇼</b>는 모든 Trip 공통입니다. 자세한 시간대별 동선은 <b>Trip A</b> 탭을 참고하세요. 아래는 권역 핵심 스팟.
+      <div style="padding:14px 18px;background:var(--pink-soft);border-radius:12px;font-size:12.5px;color:var(--pink-deep);margin-bottom:18px;font-weight:600">
+        ★ 5/5 anchor: <b>잠실 드론쇼 20:30 (15분)</b>은 모든 Trip 공통. 그 외 동선은 Trip별로 다름.
       </div>
+
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">11:00 → 22:30</div><div class="sub">~11.5시간</div></div>
+        <div class="d1-stat"><div class="lab">앵커</div><div class="val">★ 20:30</div><div class="sub">드론쇼 15분</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">한남 → 해방촌 → 잠실</div><div class="sub">미술관 + 옥상 + 드론쇼</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩90k</div><div class="sub">미술관+카페+치맥</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 한남 ▸ 해방촌 ▸ 잠실 드론쇼</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">11:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 → 한강진역 <span class="en">Line 6</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">11:30<span class="dur">~150분</span></div><div class="tl-body"><div class="tl-place">리움미술관 <span class="en">Leeum Museum</span></div><div class="tl-note">5/5 화 정상 (월 휴). 5/2 못 갔으면 여기서. 사전예약 권장.</div><div class="tl-meta"><span class="cost">₩20,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">한남 마지셔우드 점심 + 카페 <span class="en">Margesherwood</span></div><div class="tl-note">한남동 골목. 한국 가죽 브랜드 + 카페.</div><div class="tl-meta"><span class="cost">~₩20,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:15<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">해방촌 산책 + 108계단 <span class="en">Haebangchon walk</span></div><div class="tl-note">남산 자락 골목 → 108계단 마을 뷰 (5/5 낮 기준).</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">16:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">한강진 → 잠실 <span class="en">6호선 + 2호선 환승</span></div><div class="tl-note">또는 택시 ~₩15,000.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">송리단길 카페 <span class="en">Songridan-gil</span></div><div class="tl-note">석촌호수 옆 트렌디 카페 골목. 잠실의 익선동.</div><div class="tl-meta"><span class="cost">₩7,000~10,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">잠실한강공원 자리 선점 <span class="en">Jamsil Hangang Park</span></div><div class="tl-note">명당 = 잠실대교 북단 잔디밭 또는 한강공원 중앙 광장.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">한강 치맥 배달 <span class="en">Baemin</span></div><div class="tl-note">5/5 배달 폭주 — 18시 주문 권장.</div><div class="tl-meta"><span class="cost">~₩30,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">60분</span></div><div class="tl-body"><div class="tl-place">1부 문화예술공연 <span class="en">Pre-show</span></div><div class="tl-note">서울시 큐레이션 라이브.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time" style="color:var(--pink-deep)">★ 20:30<span class="dur" style="color:var(--pink)">15분</span></div><div class="tl-body"><div class="tl-place" style="color:var(--pink-deep);font-weight:900">DRONE LIGHT SHOW <span class="en">Star Wars × Disney Korea · 2,000 drones</span></div><div class="tl-note">★ 5/5 메인. 2,000대 드론 Star Wars 테마. 본공연 단독 15분.</div><div class="tl-meta"><span class="cost">FREE</span><span>★ ANCHOR</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">21:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">석촌호수 야경 도보 <span class="en">walk · 1.2km</span></div><div class="tl-note">인파 분산 + 호수 반영 야경.</div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">22:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Line 2</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 한남 → 해방촌 → 잠실 mix</span></h3>
       <div class="grid" id="B-day5Grid"></div>
     </div>
 
@@ -874,11 +972,45 @@
       <button class="day-pill" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실 드론쇼</span></button>
     </div>
 
-    <!-- Trip C / Day 1 (공통) -->
+    <!-- Trip C / Day 1 -->
     <div class="day-panel active" data-day="d1" id="panel-C-d1">
-      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
-        <b>5/1 (금) 성수·서울숲</b>은 모든 Trip 공통. 자세한 시간대별 동선은 <b>Trip A</b>.
+      <div style="padding:14px 18px;background:var(--pink-soft);border-radius:12px;font-size:12.5px;color:var(--pink-deep);margin-bottom:18px;font-weight:600">
+        ★ 5/1 anchor: <b>서울숲</b> 방문은 모든 Trip 공통. 그 외 동선은 Trip별로 다름.
       </div>
+
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 22:00</div><div class="sub">~12시간</div></div>
+        <div class="d1-stat"><div class="lab">앵커</div><div class="val">서울숲</div><div class="sub">15:00 진입</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">강북 광장 → 서울숲 → 한강</div><div class="sub">시장 + 한옥 + 한강 야경</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩100k</div><div class="sub">시장+카페+치맥</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 안국 ▸ 광장시장 ▸ 서울숲 ▸ 뚝섬</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">10:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">강남 → 안국역 <span class="en">Line 3</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">10:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">익선동 청수당 + 한옥 골목 <span class="en">Cheongsudang Ikseondong</span></div><div class="tl-note">5/1 평일 오전이라 줄 짧음. 수플레 카스테라 + 한옥 마당.</div><div class="tl-meta"><span class="cost">₩7,500</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">11:45<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">익선동 → 광장시장 <span class="en">walk · 800m</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:00<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">광장시장 점심 <span class="en">Gwangjang Market</span></div><div class="tl-note">5/1 금 정상 영업. 마약김밥 + 빈대떡 + 육회 코스. 카드 OK.</div><div class="tl-meta"><span class="cost">~₩30,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">13:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">광장시장 → 서울숲 <span class="en">택시 또는 2호선+분당선</span></div><div class="tl-note">택시 ~₩9,000.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">어니언 성수 <span class="en">Onion Seongsu</span></div><div class="tl-note">폐공장 베이커리. 빵+커피 늦은 점심 디저트.</div><div class="tl-meta"><span class="cost">₩11,500</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:00<span class="dur">~150분</span></div><div class="tl-body"><div class="tl-place" style="color:var(--pink-deep);font-weight:900">★ 서울숲 + 포켓몬 메가 페스타 <span class="en">Seoul Forest + Pokémon Festa</span></div><div class="tl-note">5/1 오프닝 데이. 사슴 방사장 + 비밀의 숲 + 정원박람회. 메타몽 플레이그라운드.</div><div class="tl-meta"><span class="cost">무료</span><span>★ ANCHOR</span><span>5/1 한정</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">디올 성수 <span class="en">DIOR Seongsu</span></div><div class="tl-note">3년 한정 그린하우스. 저녁 슬롯도 운영. 카페+가든.</div><div class="tl-meta"><span class="cost">무료 입장</span><span>예약</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">18:45<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">성수 → 뚝섬한강공원 <span class="en">walk · 1.2km</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:00<span class="dur">~150분</span></div><div class="tl-body"><div class="tl-place">뚝섬한강 치맥 + 라면 자판기 <span class="en">Ttukseom Hangang Park</span></div><div class="tl-note">5월 일몰 19:25. 배민 → 교촌치킨. GS25 라면 자판기.</div><div class="tl-meta"><span class="cost">~₩35,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">21:30<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">2호선</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 익선·광장 + 서울숲 + 뚝섬 mix</span></h3>
       <div class="grid" id="C-day1Grid"></div>
     </div>
 
@@ -980,11 +1112,47 @@
       </div>
     </div><!-- /panel-C-d3 -->
 
-    <!-- Trip C / Day 5 (공통) -->
+    <!-- Trip C / Day 5 -->
     <div class="day-panel" data-day="d5" id="panel-C-d5">
-      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
-        <b>5/5 (화) 잠실 드론쇼</b>는 모든 Trip 공통. 자세한 시간대별 동선은 <b>Trip A</b>.
+      <div style="padding:14px 18px;background:var(--pink-soft);border-radius:12px;font-size:12.5px;color:var(--pink-deep);margin-bottom:18px;font-weight:600">
+        ★ 5/5 anchor: <b>잠실 드론쇼 20:30 (15분)</b>은 모든 Trip 공통. 그 외 동선은 Trip별로 다름.
       </div>
+
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">11:00 → 22:30</div><div class="sub">~11.5시간</div></div>
+        <div class="d1-stat"><div class="lab">앵커</div><div class="val">★ 20:30</div><div class="sub">드론쇼 15분</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">광화문 → 청계 → DDP → 잠실</div><div class="sub">도심 산책 + 드론쇼</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩70k</div><div class="sub">시장+카페+치맥</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 청계 ▸ 광장 ▸ DDP ▸ 잠실 드론쇼</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">11:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 → 종각역 <span class="en">Line 1</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">11:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">청계천 산책 <span class="en">Cheonggyecheon walk</span></div><div class="tl-note">광화문 → 동대문 방향 일부. 도심 한복판 수공간.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:45<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">광장시장 점심 <span class="en">Gwangjang Market</span></div><div class="tl-note">5/5 화 정상 영업. 마약김밥+빈대떡+육회 코스.</div><div class="tl-meta"><span class="cost">~₩30,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">인사동 쌈지길 <span class="en">Insadong Ssamzigil</span></div><div class="tl-note">4층 나선형 골목 쇼핑. 한국 디자이너+전통공예. 옥상.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">15:00<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">인사동 → DDP <span class="en">walk + Line</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:15<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">DDP 디자인 전시 <span class="en">DDP Exhibitions</span></div><div class="tl-note">자하 하디드 외관 + 디자인 전시 (실내). 5/5 가족 인파 적은 편.</div><div class="tl-meta"><span class="cost">전시 ~₩15,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">17:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">DDP → 잠실 <span class="en">2호선</span></div><div class="tl-note">동대문역사문화공원역 → 잠실역 13분.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">석촌호수 산책 (낮 풍경) <span class="en">Seokchon Lake</span></div><div class="tl-note">롯데타워 호수 반영 (낮 / 야경 다 다름). 둘레 2.5km 일부.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">잠실한강공원 자리 선점 <span class="en">Jamsil Hangang</span></div><div class="tl-note">명당: 잠실대교 북단 또는 한강공원 중앙.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">60분</span></div><div class="tl-body"><div class="tl-place">1부 + 치맥 <span class="en">Pre-show + delivery</span></div><div class="tl-note">배민 치맥 (18시 주문 권장). 1부 라이브.</div><div class="tl-meta"><span class="cost">~₩30,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time" style="color:var(--pink-deep)">★ 20:30<span class="dur" style="color:var(--pink)">15분</span></div><div class="tl-body"><div class="tl-place" style="color:var(--pink-deep);font-weight:900">DRONE LIGHT SHOW <span class="en">Star Wars × Disney Korea · 2,000 drones</span></div><div class="tl-note">★ 5/5 메인. 2,000대 드론 본공연 단독 15분.</div><div class="tl-meta"><span class="cost">FREE</span><span>★ ANCHOR</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">22:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Line 2</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 도심 → 잠실 mix</span></h3>
       <div class="grid" id="C-day5Grid"></div>
     </div>
 
@@ -1228,24 +1396,30 @@ document.getElementById("catChips").addEventListener("click",e=>{
 });
 
 // ─────────────────────────────────────────────────
-// Day grids per Trip
+// Day grids per Trip — order matters (= itinerary order for map route)
 // ─────────────────────────────────────────────────
 const TRIP_GRIDS={
-  // Trip A (current)
-  "day1Grid":[1,2,3,4,5,6,7,8,9],
+  // Trip A
+  "day1Grid":[4,5,6,7,3,1,2,8,9],
   "day2Grid":[20,21,22,23,24,25,26,18,19,10,11,12,13,14,15,16,17],
   "day3Grid":[27,28,29,30,31],
-  "day5Grid":[43,44,45,46,47,48,35,36],
+  "day5Grid":[35,36,46,47,48,44,43,45],
   // Trip B
-  "B-day1Grid":[1,2,3,4,5,6,7,8,9],
-  "B-day2Grid":[49,50,51,52,53,32,33,34],
-  "B-day3Grid":[54,55,56,57,58,21,22],
-  "B-day5Grid":[43,44,45,46,47,48],
+  "B-day1Grid":[38,37,7,1,2,51,53,33,34,52],
+  "B-day2Grid":[49,51,53,33,34,52],
+  "B-day3Grid":[56,55,54,57,21],
+  "B-day5Grid":[49,51,33,46,44,43],
   // Trip C
-  "C-day1Grid":[1,2,3,4,5,6,7,8,9],
-  "C-day2Grid":[59,60,61,41,18,19,10,11,12,14,15,16],
-  "C-day3Grid":[62,63,30,31,29,27,65],
-  "C-day5Grid":[43,44,45,46,47,48]
+  "C-day1Grid":[11,41,4,3,1,2,8],
+  "C-day2Grid":[60,61,41,19,18,10,11,14,15,16,59],
+  "C-day3Grid":[62,63,30,31,65],
+  "C-day5Grid":[61,41,60,59,44,43]
+};
+// Routes for map polylines — same as grids
+const ROUTES={
+  "A-d1":TRIP_GRIDS["day1Grid"],"A-d2":TRIP_GRIDS["day2Grid"],"A-d3":TRIP_GRIDS["day3Grid"],"A-d5":TRIP_GRIDS["day5Grid"],
+  "B-d1":TRIP_GRIDS["B-day1Grid"],"B-d2":TRIP_GRIDS["B-day2Grid"],"B-d3":TRIP_GRIDS["B-day3Grid"],"B-d5":TRIP_GRIDS["B-day5Grid"],
+  "C-d1":TRIP_GRIDS["C-day1Grid"],"C-d2":TRIP_GRIDS["C-day2Grid"],"C-d3":TRIP_GRIDS["C-day3Grid"],"C-d5":TRIP_GRIDS["C-day5Grid"]
 };
 Object.entries(TRIP_GRIDS).forEach(([gridId,ids])=>{
   const el=document.getElementById(gridId);
@@ -1290,34 +1464,104 @@ document.getElementById("topNav").addEventListener("click",e=>{
 // ──────────────────────────────────────────
 // MAP
 // ──────────────────────────────────────────
+let mapLayers={markers:[],route:null,numbered:[]};
+let mapState={trip:"all",day:"all"};
+const TRIP_COLOR={A:"#ec4899",B:"#0c4a6e",C:"#b91c1c"};
+
+function makePopup(s,n){
+  const mapsUrl="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.mapsQ);
+  const num=n?`<span style="display:inline-block;background:#0f172a;color:#fff;width:18px;height:18px;border-radius:50%;text-align:center;font-weight:800;font-size:10px;line-height:18px;margin-right:6px">${n}</span>`:"";
+  return `
+    <div class="pop-ko">${num}${escapeHtml(s.ko)}</div>
+    <div class="pop-en">${escapeHtml(s.en)} · ${escapeHtml(s.area)}</div>
+    <div class="pop-hook">${escapeHtml(s.hook)}</div>
+    <div style="font-size:11px;color:#94a3b8;margin-top:6px">${escapeHtml(s.hours)} · ${escapeHtml(s.price)}</div>
+    <a class="pop-link" href="${mapsUrl}" target="_blank">Google Maps →</a>`;
+}
+
+function clearMapLayers(){
+  mapLayers.markers.forEach(m=>leafletMap.removeLayer(m));
+  mapLayers.numbered.forEach(m=>leafletMap.removeLayer(m));
+  if(mapLayers.route)leafletMap.removeLayer(mapLayers.route);
+  mapLayers={markers:[],route:null,numbered:[]};
+}
+
+function renderMap(){
+  clearMapLayers();
+  const colorMap={hidden:"#ec4899",cafe:"#f59e0b",food:"#dc2626",night:"#1e1b4b",hanok:"#b91c1c",culture:"#0c4a6e",shop:"#15803d"};
+  const {trip,day}=mapState;
+
+  const bounds=[];
+
+  if(trip==="all"){
+    // Show all markers (no route)
+    SPOTS.forEach(s=>{
+      const color=colorMap[s.cat[0]||"hidden"]||"#ec4899";
+      const r=s.featured?12:8;
+      const m=L.circleMarker([s.lat,s.lng],{radius:r,weight:2,color:"#fff",fillColor:color,fillOpacity:.95}).addTo(leafletMap);
+      m.bindPopup(makePopup(s));
+      mapLayers.markers.push(m);
+      bounds.push([s.lat,s.lng]);
+    });
+    document.getElementById("routeInfo").style.display="none";
+  }else{
+    // Trip selected
+    const tripColor=TRIP_COLOR[trip];
+    const days=day==="all"?["d1","d2","d3","d5"]:[day];
+    let totalSpots=0;
+    days.forEach(d=>{
+      const ids=ROUTES[trip+"-"+d];
+      if(!ids)return;
+      const list=ids.map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean);
+      if(list.length===0)return;
+      // Polyline
+      const latlngs=list.map(s=>[s.lat,s.lng]);
+      const line=L.polyline(latlngs,{color:tripColor,weight:3,opacity:.6,dashArray:"6,8"}).addTo(leafletMap);
+      mapLayers.markers.push(line);
+      // Numbered markers
+      list.forEach((s,i)=>{
+        const num=i+1;
+        const icon=L.divIcon({
+          className:"",
+          html:`<div style="background:${tripColor};color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;font-weight:800;font-size:13px;line-height:28px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">${num}</div>`,
+          iconSize:[28,28],iconAnchor:[14,14]
+        });
+        const m=L.marker([s.lat,s.lng],{icon}).addTo(leafletMap);
+        m.bindPopup(makePopup(s,num));
+        mapLayers.numbered.push(m);
+        bounds.push([s.lat,s.lng]);
+        totalSpots++;
+      });
+    });
+    const dayLabel=day==="all"?"5/1·5/2·5/3·5/5 전체":day.replace("d","5/");
+    document.getElementById("routeInfo").style.display="block";
+    document.getElementById("routeLabel").innerHTML=`<b style="color:${tripColor}">Trip ${trip}</b> · ${dayLabel} · 총 <b>${totalSpots}곳</b> · 점선 = 동선 순서`;
+  }
+
+  if(bounds.length>0)leafletMap.fitBounds(bounds,{padding:[40,40]});
+}
+
 function initMap(){
   leafletMap=L.map("mapHolder",{scrollWheelZoom:true}).setView([37.5560,127.0],11.6);
   L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{
     attribution:"&copy; OpenStreetMap &copy; CARTO",
     subdomains:"abcd",maxZoom:19
   }).addTo(leafletMap);
+  renderMap();
 
-  const colorMap={hidden:"#ec4899",cafe:"#f59e0b",food:"#dc2626",night:"#1e1b4b",hanok:"#b91c1c",culture:"#0c4a6e",shop:"#15803d"};
-  const bounds=[];
-  SPOTS.forEach(s=>{
-    const primary=s.cat[0]||"hidden";
-    const color=colorMap[primary]||"#ec4899";
-    const isFeatured=s.featured;
-    const radius=isFeatured?12:8;
-    const marker=L.circleMarker([s.lat,s.lng],{
-      radius,weight:2,color:"#fff",fillColor:color,fillOpacity:.95
-    }).addTo(leafletMap);
-    const mapsUrl="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.mapsQ);
-    marker.bindPopup(`
-      <div class="pop-ko">${escapeHtml(s.ko)} ${isFeatured?"★":""}</div>
-      <div class="pop-en">${escapeHtml(s.en)} · ${escapeHtml(s.area)}</div>
-      <div class="pop-hook">${escapeHtml(s.hook)}</div>
-      <div style="font-size:11px;color:#94a3b8;margin-top:6px">${escapeHtml(s.hours)} · ${escapeHtml(s.price)}</div>
-      <a class="pop-link" href="${mapsUrl}" target="_blank">Google Maps →</a>
-    `);
-    bounds.push([s.lat,s.lng]);
-  });
-  leafletMap.fitBounds(bounds,{padding:[24,24]});
+  // Filter buttons
+  document.querySelectorAll(".map-trip-btn").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".map-trip-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    mapState.trip=b.dataset.trip;
+    renderMap();
+  }));
+  document.querySelectorAll(".map-day-btn").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".map-day-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    mapState.day=b.dataset.day;
+    renderMap();
+  }));
 }
 
 </script>
