@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Non-Touristy Seoul · 외국인 시점 서울 인사이드 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --bg:#fdfaf6;
+    --bg-soft:#f5f0e8;
+    --ink:#0f172a;
+    --ink-soft:#475569;
+    --ink-mute:#94a3b8;
+    --line:#e7e0d3;
+    --pink:#ec4899;
+    --pink-soft:#fce7f3;
+    --pink-deep:#be185d;
+    --blue:#0c4a6e;
+    --red:#b91c1c;
+    --yellow:#fde68a;
+    --green:#15803d;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 4px 12px rgba(15,23,42,.06);
+    --shadow-lg:0 4px 24px rgba(15,23,42,.08),0 12px 40px rgba(15,23,42,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR','Inter',-apple-system,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  ::selection{background:var(--pink);color:#fff}
+
+  /* ── Top Bar ─────────────────────────────────── */
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(253,250,246,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:8px}
+  .brand-mark{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.02em}
+  .brand-mark .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--pink);margin-right:6px;transform:translateY(-2px)}
+  .brand-sub{font-size:11px;color:var(--ink-mute);letter-spacing:.05em;text-transform:uppercase}
+  .nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+  .nav button{padding:8px 14px;border-radius:99px;font-size:12.5px;font-weight:600;color:var(--ink-soft);transition:all .15s}
+  .nav button:hover{color:var(--ink);background:var(--bg-soft)}
+  .nav button.active{background:var(--ink);color:#fff}
+  .meta-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;background:var(--pink-soft);color:var(--pink-deep);font-size:11px;font-weight:700}
+
+  /* ── Hero ─────────────────────────────────── */
+  .hero{max-width:1280px;margin:0 auto;padding:48px 24px 28px;position:relative}
+  .hero-eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink-mute);margin-bottom:18px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+  .hero-eyebrow .line{flex:0 0 28px;height:1px;background:var(--ink-mute)}
+  .hero h1{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(36px,6.4vw,68px);line-height:1.02;letter-spacing:-.035em;color:var(--ink)}
+  .hero h1 .accent{color:var(--pink);font-style:italic}
+  .hero h1 .small{display:block;font-size:.42em;font-weight:500;font-style:normal;color:var(--ink-soft);margin-top:14px;letter-spacing:0;font-family:'Noto Sans KR',sans-serif;line-height:1.4}
+  .hero-tags{display:flex;gap:6px;margin-top:22px;flex-wrap:wrap}
+  .tag{display:inline-block;padding:5px 11px;border-radius:99px;background:#fff;border:1px solid var(--line);font-size:11.5px;color:var(--ink-soft);font-weight:500}
+  .tag.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tag.pink{background:var(--pink);color:#fff;border-color:var(--pink)}
+  .tag.warn{background:#fef3c7;color:#92400e;border-color:#fbbf24}
+
+  /* ── Stats ─────────────────────────────────── */
+  .stats{max-width:1280px;margin:8px auto 32px;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .stat{background:var(--bg);padding:18px 18px}
+  .stat .num{font-family:'Inter',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.03em;line-height:1;color:var(--ink)}
+  .stat .num small{font-size:14px;color:var(--ink-mute);font-weight:600;margin-left:4px}
+  .stat .lab{font-size:11.5px;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.04em;margin-top:6px;font-weight:600}
+
+  /* ── Section ─────────────────────────────────── */
+  section{max-width:1280px;margin:0 auto;padding:48px 24px}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;gap:20px;flex-wrap:wrap}
+  .sec-title{display:flex;align-items:baseline;gap:14px}
+  .sec-title h2{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(24px,3vw,34px);letter-spacing:-.03em;line-height:1.1}
+  .sec-title h2 .num{color:var(--pink);font-weight:500;font-style:italic;margin-right:6px}
+  .sec-title p{font-size:13px;color:var(--ink-mute);margin-top:4px}
+  .sec-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+  /* ── Filter Chips ─────────────────────────────────── */
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+  .chip{padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:12.5px;color:var(--ink-soft);font-weight:600;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--ink);color:var(--ink)}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ── Card Grid ─────────────────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s,border-color .2s}
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:#d1c8b3}
+  .card.featured{border:2px solid var(--pink);background:linear-gradient(180deg,var(--pink-soft) 0%,#fff 30%)}
+  .card-cover{height:140px;position:relative;overflow:hidden;background:linear-gradient(135deg,#fee2e2 0%,#fce7f3 100%)}
+  .card-cover.c-blue{background:linear-gradient(135deg,#dbeafe 0%,#cffafe 100%)}
+  .card-cover.c-green{background:linear-gradient(135deg,#d1fae5 0%,#fef3c7 100%)}
+  .card-cover.c-purple{background:linear-gradient(135deg,#ede9fe 0%,#fce7f3 100%)}
+  .card-cover.c-amber{background:linear-gradient(135deg,#fed7aa 0%,#fef3c7 100%)}
+  .card-cover.c-rose{background:linear-gradient(135deg,#ffe4e6 0%,#fff1f2 100%)}
+  .card-cover.c-night{background:linear-gradient(135deg,#0c4a6e 0%,#1e1b4b 100%);color:#fff}
+  .card-cover.c-mono{background:linear-gradient(135deg,#f3f4f6 0%,#e5e7eb 100%)}
+  .card-cover .cover-glyph{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Inter',sans-serif;font-weight:900;font-size:64px;letter-spacing:-.04em;opacity:.85;line-height:.9;text-align:center}
+  .card-cover .cover-glyph .sub{display:block;font-size:.22em;letter-spacing:.18em;font-weight:600;margin-top:8px;opacity:.7;text-transform:uppercase}
+  .card-cover .badge-row{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+  .badge{display:inline-block;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:.02em;background:rgba(255,255,255,.92);color:var(--ink);backdrop-filter:blur(6px)}
+  .badge.pink{background:var(--pink);color:#fff}
+  .badge.dark{background:rgba(15,23,42,.85);color:#fff}
+  .badge.amber{background:#f59e0b;color:#fff}
+  .card-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card-name-ko{font-weight:700;font-size:15px;line-height:1.3;color:var(--ink)}
+  .card-name-en{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--ink-mute);font-weight:500;letter-spacing:.01em;text-transform:uppercase;margin-top:-2px}
+  .card-hook{font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin-top:2px}
+  .card-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+  .card-meta span{font-size:10.5px;color:var(--ink-mute);background:var(--bg-soft);padding:3px 8px;border-radius:6px;font-weight:600}
+  .card-meta span.tag-area{color:var(--pink-deep);background:var(--pink-soft)}
+  .card-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--line);background:var(--bg)}
+  .card-price{font-family:'Inter',sans-serif;font-weight:800;font-size:13px;letter-spacing:-.01em}
+  .card-price .usd{color:var(--ink-mute);font-weight:500;font-size:11.5px;margin-left:4px}
+  .card-foot a{font-size:11.5px;color:var(--ink-soft);font-weight:600;display:inline-flex;align-items:center;gap:3px;transition:color .15s}
+  .card-foot a:hover{color:var(--pink-deep)}
+
+  /* ── Day1 Featured ─────────────────────────────────── */
+  .day1-feature{background:linear-gradient(135deg,var(--ink) 0%,#1e1b4b 100%);color:#fff;border-radius:24px;padding:36px 32px;margin-bottom:28px;position:relative;overflow:hidden}
+  .day1-feature::before{content:"";position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,var(--pink) 0%,transparent 70%);opacity:.5}
+  .day1-feature::after{content:"";position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,#fbbf24 0%,transparent 70%);opacity:.3}
+  .day1-feature .d1-eyebrow{font-size:12px;color:var(--pink);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;position:relative;z-index:2}
+  .day1-feature h3{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(28px,4.4vw,46px);letter-spacing:-.03em;line-height:1.05;position:relative;z-index:2}
+  .day1-feature h3 .ko{font-family:'Noto Sans KR',sans-serif;display:block;font-size:.5em;font-weight:500;color:rgba(255,255,255,.8);margin-top:10px;letter-spacing:0}
+  .day1-feature .d1-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:rgba(255,255,255,.12);margin-top:24px;border-radius:14px;overflow:hidden;position:relative;z-index:2}
+  .day1-feature .d1-cell{background:rgba(15,23,42,.85);padding:14px 16px}
+  .day1-feature .d1-cell .time{font-family:'Inter',sans-serif;font-weight:800;font-size:14px;letter-spacing:-.01em;color:var(--pink)}
+  .day1-feature .d1-cell .place{font-size:13px;font-weight:600;color:#fff;margin-top:4px}
+  .day1-feature .d1-cell .note{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;line-height:1.4}
+  .day1-feature .d1-foot{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px;font-size:12px;color:rgba(255,255,255,.7);position:relative;z-index:2}
+  .day1-feature .d1-foot strong{color:#fde68a;font-weight:700}
+
+  /* ── Map ─────────────────────────────────── */
+  #mapHolder{height:520px;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .leaflet-popup-content-wrapper{border-radius:12px;padding:2px}
+  .leaflet-popup-content{font-family:'Noto Sans KR',sans-serif;font-size:12.5px;line-height:1.5;margin:10px 12px}
+  .leaflet-popup-content b{font-size:13.5px}
+  .pop-ko{font-weight:700;font-size:14px;color:var(--ink)}
+  .pop-en{font-family:'Inter',sans-serif;font-size:11px;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}
+  .pop-hook{color:var(--ink-soft);margin-top:4px}
+  .pop-link{display:inline-block;margin-top:6px;color:var(--pink-deep);font-weight:700;font-size:11.5px}
+
+  /* ── Timeline (Day 1 detail) ─────────────────────────────────── */
+  .timeline{position:relative;padding-left:28px;margin-bottom:36px}
+  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--pink) 0%,var(--ink) 100%)}
+  .tl-row{position:relative;padding:14px 0 14px 16px;display:grid;grid-template-columns:78px 1fr;gap:14px;align-items:flex-start}
+  .tl-row::before{content:"";position:absolute;left:-25px;top:18px;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--pink);box-shadow:0 0 0 3px var(--bg)}
+  .tl-row.transit::before{border-color:var(--ink-mute);width:10px;height:10px;left:-23px;top:21px;border-width:2px}
+  .tl-time{font-family:'Inter',sans-serif;font-weight:800;font-size:14px;color:var(--ink);letter-spacing:-.02em;line-height:1.3}
+  .tl-time .dur{display:block;font-size:11px;color:var(--ink-mute);font-weight:600;margin-top:2px}
+  .tl-body{padding:0}
+  .tl-body .tl-place{font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .tl-body .tl-place .en{font-family:'Inter',sans-serif;font-weight:500;font-size:11.5px;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.03em;margin-left:6px}
+  .tl-body .tl-note{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+  .tl-body .tl-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .tl-body .tl-meta span{font-size:10.5px;background:var(--bg-soft);color:var(--ink-soft);padding:3px 8px;border-radius:6px;font-weight:600}
+  .tl-body .tl-meta span.cost{background:var(--pink-soft);color:var(--pink-deep)}
+  .tl-row.transit .tl-place{font-weight:600;font-size:12.5px;color:var(--ink-soft)}
+  .tl-row.transit .tl-place::before{content:"→ ";color:var(--ink-mute)}
+
+  /* ── Booking check ─────────────────────────────────── */
+  .booking{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px}
+  .bk{padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;gap:4px}
+  .bk .when{font-family:'Inter',sans-serif;font-weight:900;font-size:11px;color:var(--pink);letter-spacing:.06em;text-transform:uppercase}
+  .bk .what{font-weight:700;font-size:13.5px;letter-spacing:-.01em}
+  .bk .how{font-size:11.5px;color:var(--ink-mute);line-height:1.5}
+  .bk.urgent{border-color:var(--pink);background:linear-gradient(180deg,var(--pink-soft) 0%,#fff 100%)}
+
+  /* ── Day1 stats row ─────────────────────────────────── */
+  .d1-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:24px}
+  .d1-stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .d1-stat .lab{font-size:10.5px;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  .d1-stat .val{font-family:'Inter',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;margin-top:4px}
+  .d1-stat .sub{font-size:11px;color:var(--ink-mute);margin-top:2px}
+
+  .sub-h3{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.02em;margin:32px 0 12px;display:flex;align-items:baseline;gap:10px}
+  .sub-h3 .k{font-size:13px;font-weight:600;color:var(--ink-mute);font-family:'Noto Sans KR',sans-serif;letter-spacing:0}
+
+  /* ── Tips ─────────────────────────────────── */
+  .tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .tip{padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px}
+  .tip .tip-num{font-family:'Inter',sans-serif;font-weight:900;font-size:13px;color:var(--pink);letter-spacing:.05em}
+  .tip h4{font-size:15px;margin-top:6px;font-weight:800;letter-spacing:-.01em}
+  .tip p{font-size:13px;color:var(--ink-soft);margin-top:8px}
+  .tip ul{list-style:none;margin-top:8px}
+  .tip ul li{font-size:12.5px;color:var(--ink-soft);padding:4px 0;padding-left:14px;position:relative;line-height:1.5}
+  .tip ul li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;border-radius:50%;background:var(--pink)}
+
+  /* ── Closure Matrix ─────────────────────────────────── */
+  .matrix{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .matrix table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .matrix th{background:var(--bg-soft);padding:11px 14px;text-align:left;font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+  .matrix th.center{text-align:center}
+  .matrix td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--ink-soft)}
+  .matrix tr:last-child td{border-bottom:none}
+  .matrix td.center{text-align:center}
+  .matrix .ok{color:var(--green);font-weight:700}
+  .matrix .no{color:var(--red);font-weight:700}
+  .matrix .warn{color:#b45309;font-weight:700}
+
+  /* ── Footer ─────────────────────────────────── */
+  footer{margin:60px 0 0;padding:40px 24px 48px;background:var(--ink);color:rgba(255,255,255,.7);text-align:center;font-size:12.5px}
+  footer .foot-mark{font-family:'Inter',sans-serif;font-weight:900;color:#fff;font-size:14px;letter-spacing:-.01em;margin-bottom:8px}
+  footer .foot-mark .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pink);margin-right:6px;transform:translateY(-2px)}
+
+  /* ── Hide/show by tab ─────────────────────────────────── */
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+
+  @media(max-width:640px){
+    .topbar-inner{padding:12px 16px}
+    .nav{margin-left:0;width:100%;overflow-x:auto;flex-wrap:nowrap}
+    section,.hero{padding-left:16px;padding-right:16px}
+    .day1-feature{padding:28px 22px}
+    .grid{grid-template-columns:1fr}
+    .hero{padding-top:36px;padding-bottom:20px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── Top Bar ─── -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark"><span class="dot"></span>SEOUL · IN</div>
+      <div class="brand-sub">a local's foreign POV</div>
+    </div>
+    <nav class="nav" id="topNav">
+      <button data-tab="home" class="active">Browse</button>
+      <button data-tab="map">Map</button>
+      <button data-tab="day1">5/1 서울숲</button>
+      <button data-tab="tips">Tips</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ─── Tab: HOME (Browse) ─── -->
+<div class="tab-content active" id="tab-home">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <span class="line"></span>
+      <span>Seoul · 2026.05.01 — 05.03 · 2 nights · Solo</span>
+    </div>
+    <h1>Seoul, but <span class="accent">not the postcard.</span></h1>
+    <div class="hero-tags">
+      <span class="tag dark">강남 자택 베이스</span>
+      <span class="tag">5/1 (금) 근로자의 날 · 황금연휴 시작</span>
+      <span class="tag pink">5/1 = 서울숲 + 포켓몬 메가 페스타 2026</span>
+      <span class="tag warn">5/3 (일) · 광장시장·남대문 휴무</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="num">42<small>곳</small></div><div class="lab">큐레이션 스팟</div></div>
+    <div class="stat"><div class="num">8<small>동네</small></div><div class="lab">히든 권역</div></div>
+    <div class="stat"><div class="num">3<small>일</small></div><div class="lab">강남 베이스</div></div>
+    <div class="stat"><div class="num">₩545<small>k</small></div><div class="lab">예상 식음·체험비</div></div>
+    <div class="stat"><div class="num">₩0<small></small></div><div class="lab">숙박비 (자택)</div></div>
+  </div>
+
+  <!-- Day 1 Featured -->
+  <section style="padding-top:8px">
+    <div class="day1-feature">
+      <div class="d1-eyebrow">May 1 · Friday · highlight</div>
+      <h3>
+        Seoul Forest, but with Pokémon.
+        <span class="ko">5/1 첫날은 <b>성수·서울숲</b> 권역. 디올 팝업 + 30주년 포켓몬 메가 페스타 + 사슴 방사장 + 한강 야경 — 강남에서 20분.</span>
+      </h3>
+      <div class="d1-grid">
+        <div class="d1-cell">
+          <div class="time">10:30</div>
+          <div class="place">Onion Seongsu</div>
+          <div class="note">폐공장 베이커리 · 빵+커피 ₩11,500</div>
+        </div>
+        <div class="d1-cell">
+          <div class="time">12:00</div>
+          <div class="place">Dior Seongsu</div>
+          <div class="note">3년 한정 그린하우스 팝업 · 앱 예약</div>
+        </div>
+        <div class="d1-cell">
+          <div class="time">14:00</div>
+          <div class="place">Seoul Forest 서울숲</div>
+          <div class="note">사슴 방사장 + 정원박람회 신록</div>
+        </div>
+        <div class="d1-cell">
+          <div class="time">15:00</div>
+          <div class="place">Pokémon Mega Festa</div>
+          <div class="note">5/1~6/21 한정 · 메타몽 플레이그라운드</div>
+        </div>
+        <div class="d1-cell">
+          <div class="time">17:30</div>
+          <div class="place">뚝섬한강공원</div>
+          <div class="note">치맥 배달 + 라면 자판기 + 일몰</div>
+        </div>
+        <div class="d1-cell">
+          <div class="time">21:00</div>
+          <div class="place">강남 복귀</div>
+          <div class="note">2호선 성수역 → 강남역 23분</div>
+        </div>
+      </div>
+      <div class="d1-foot">
+        <span><strong>POKÉMON</strong> 5/1~6/21 · 30th Anniversary · 무료 입장</span>
+        <span><strong>SEOUL GARDEN SHOW</strong> 서울숲 · 5월 한정</span>
+        <span><strong>강남 ↔ 성수</strong> 2호선 23분 · 1,500원</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Browse -->
+  <section style="padding-top:0">
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">01</span>Places</h2>
+      </div>
+      <div class="sec-actions">
+        <p style="font-size:12px;color:var(--ink-mute)">동네·카테고리로 필터링 가능</p>
+      </div>
+    </div>
+    <div class="chips" id="catChips">
+      <button class="chip active" data-cat="all">All</button>
+      <button class="chip" data-cat="hidden">히든·로컬</button>
+      <button class="chip" data-cat="cafe">카페·베이커리</button>
+      <button class="chip" data-cat="food">맛집</button>
+      <button class="chip" data-cat="night">야경·옥상</button>
+      <button class="chip" data-cat="hanok">한옥·전통</button>
+      <button class="chip" data-cat="culture">K-Culture</button>
+      <button class="chip" data-cat="shop">쇼핑·트렌드</button>
+    </div>
+    <div class="grid" id="cardGrid"></div>
+  </section>
+
+</div>
+
+<!-- ─── Tab: MAP ─── -->
+<div class="tab-content" id="tab-map">
+  <section>
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">02</span>Map</h2>
+        <p>모든 스팟 한눈에 — 핀 클릭 시 상세</p>
+      </div>
+    </div>
+    <div id="mapHolder"></div>
+  </section>
+</div>
+
+<!-- ─── Tab: DAY 1 ─── -->
+<div class="tab-content" id="tab-day1">
+  <section>
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">03</span>5/1 (금) — 성수·서울숲</h2>
+        <p>강남 자택 → 성수·서울숲 → 뚝섬한강 → 강남 복귀</p>
+      </div>
+    </div>
+
+    <div class="d1-stats">
+      <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 22:00</div><div class="sub">약 12시간</div></div>
+      <div class="d1-stat"><div class="lab">도보</div><div class="val">~6 km</div><div class="sub">서울숲 1km + 카페거리 산책</div></div>
+      <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩95k</div><div class="sub">≈ $68 · 식음+체험</div></div>
+      <div class="d1-stat"><div class="lab">교통비</div><div class="val">₩4,500</div><div class="sub">2호선 왕복 + 도보</div></div>
+      <div class="d1-stat"><div class="lab">날씨</div><div class="val">17–22 °C</div><div class="sub">5월 초 평균 · 일교차</div></div>
+    </div>
+
+    <h3 class="sub-h3">사전 예약 체크 <span class="k">— 5/1 한 번에 끝내려면 미리</span></h3>
+    <div class="booking">
+      <div class="bk urgent">
+        <span class="when">D-7 · 디올 성수</span>
+        <span class="what">DIOR Seongsu 입장 슬롯</span>
+        <span class="how">앱 / 카카오톡 채널 — 황금연휴 워크인 대기 길어짐. 오후 11~14시 슬롯 선점.</span>
+      </div>
+      <div class="bk urgent">
+        <span class="when">D-3 · 포켓몬</span>
+        <span class="what">Pokémon Mega Festa 입장권 (필요 시)</span>
+        <span class="how">서울숲 비밀의 숲은 무료 입장. 메타몽 플레이그라운드는 사전 예약 슬롯제 가능 — 공식 SNS 확인.</span>
+      </div>
+      <div class="bk">
+        <span class="when">D-Day · 짐</span>
+        <span class="what">가벼운 자켓 + 우산 + 보조배터리</span>
+        <span class="how">5월 초 일교차 큼 (낮 22°C / 밤 14°C). 강수일 평균 8일.</span>
+      </div>
+      <div class="bk">
+        <span class="when">D-Day · 배달</span>
+        <span class="what">뚝섬 한강 Zone 번호 확인</span>
+        <span class="how">배민 앱에서 뚝섬한강 위치 인식 → 라이더에게 Zone 번호 전달.</span>
+      </div>
+    </div>
+
+    <h3 class="sub-h3">시간대별 동선 <span class="k">— Hour by hour</span></h3>
+    <div class="timeline">
+      <div class="tl-row transit"><div class="tl-time">10:00<span class="dur">23분</span></div><div class="tl-body"><div class="tl-place">강남역 → 성수역 <span class="en">Line 2 · 1,500₩</span></div><div class="tl-note">2호선 직통. 출퇴근 시간 지나서 한가함.</div></div></div>
+
+      <div class="tl-row"><div class="tl-time">10:30<span class="dur">~50분</span></div><div class="tl-body"><div class="tl-place">어니언 성수 <span class="en">Onion Seongsu</span></div><div class="tl-note">폐공장 베이커리. 8시 오픈이라 10시 반엔 아침 줄 빠진 상태. 판도로·바닐라빈 라떼.</div><div class="tl-meta"><span class="cost">₩11,500</span><span>아차산로9길 8</span><span>카드 OK</span></div></div></div>
+
+      <div class="tl-row"><div class="tl-time">11:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">펠릭스 포스터 월 + 카페거리 <span class="en">Felix Wall · Seongsu Lane</span></div><div class="tl-note">노란 포스터 벽 → HAUS NOWHERE 외관 → 대림창고 갤러리 입구만 컷.</div><div class="tl-meta"><span class="cost">무료</span><span>도보 5분 권역</span></div></div></div>
+
+      <div class="tl-row"><div class="tl-time">12:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">디올 성수 <span class="en">DIOR Seongsu</span></div><div class="tl-note">3년 한정 그린하우스 팝업. 1,700㎡ 메탈메쉬 파사드. Café Dior 음료.</div><div class="tl-meta"><span class="cost">입장 무료</span><span>음료 ₩12,000~</span><span>앱 예약</span></div></div></div>
+
+      <div class="tl-row"><div class="tl-time">13:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">점심 — LCDC 성수 또는 대림창고 <span class="en">LCDC / Daelim Changgo</span></div><div class="tl-note">LCDC 라이프스타일 콤플렉스 브런치 약 ₩18,000. 또는 대림창고에서 가벼운 식사 + 갤러리.</div><div class="tl-meta"><span class="cost">₩15,000~20,000</span><span>1인 OK</span></div></div></div>
+
+      <div class="tl-row"><div class="tl-time">15:00<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">서울숲 + 포켓몬 메가 페스타 <span class="en">Seoul Forest + Pokémon Festa</span></div><div class="tl-note"><b>5/1 오프닝 데이.</b> 사슴 방사장 → 비밀의 숲 (포켓몬 컨셉 30주년) → 서울국제정원박람회 신록. 메타몽 플레이그라운드 줄 길 수 있음 → 평일 오후가 그나마 한가.</div><div class="tl-meta"><span class="cost">무료</span><span>5/1~6/21 한정</span><span>굿즈 별도</span></div></div></div>
+
+      <div class="tl-row transit"><div class="tl-time">17:00<span class="dur">15분</span></div><div class="tl-body"><div class="tl-place">서울숲 → 뚝섬한강공원 <span class="en">walk · 1.2km</span></div><div class="tl-note">뚝섬한강 공원 다리 건너 도보. 강 따라 일몰 시작.</div></div></div>
+
+      <div class="tl-row"><div class="tl-time">17:30<span class="dur">~150분</span></div><div class="tl-body"><div class="tl-place">뚝섬한강공원 — 치맥 + 라면 자판기 <span class="en">Ttukseom Hangang Park</span></div><div class="tl-note">5월 초 일몰 19:25. 배민 → 교촌치킨 배달 (Zone 번호). 편의점 GS25 라면 자판기 + 캔맥주.</div><div class="tl-meta"><span class="cost">~₩35,000</span><span>치킨+맥주+배달비</span></div></div></div>
+
+      <div class="tl-row"><div class="tl-time">20:00<span class="dur">~45분</span></div><div class="tl-body"><div class="tl-place">옵션 — 응봉산 팔각정 야경 <span class="en">Eungbongsan Palgakjeong</span></div><div class="tl-note">한강 + 서울숲 + 도심 한 컷 야경. N타워보다 더 깊은 서울. 무료·24시간. 뚝섬에서 응봉역 한 정거장.</div><div class="tl-meta"><span class="cost">무료</span><span>hidden gem</span></div></div></div>
+
+      <div class="tl-row transit"><div class="tl-time">21:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Seongsu/Eungbong → Gangnam</span></div><div class="tl-note">2호선 직통 또는 택시 (~₩14,000).</div></div></div>
+    </div>
+
+    <h3 class="sub-h3">스팟 카드 <span class="k">— 5/1 권역 11곳</span></h3>
+    <div class="grid" id="day1Grid"></div>
+
+    <h3 class="sub-h3">5/1 메모 <span class="k">— 알고 가면 좋음</span></h3>
+    <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+      <ul>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>5/1 = 근로자의 날</b>. 박물관·고궁·디올·서울숲·올리브영·백화점 모두 정상. 은행·관공서·일부 사기업만 휴무.</li>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>포켓몬 메가 페스타 2026</b> = 5/1~6/21 한정. 서울숲 비밀의 숲 + 성수 메타몽 플레이그라운드 + 올리브영 N 성수 30주년 굿즈 팝업 3종 동시. 5/1 오프닝이라 SNS 줄 길 수 있음 → 점심 후 진입.</li>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>디올 성수</b>는 앱 사전 예약제. 워크인 받기도 하지만 황금연휴 토·일 대비 5/1 평일 오후가 가장 한가함. 카페+가든 무료 음료 1잔 포함되는 슬롯도 있음.</li>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>뚝섬 vs 반포</b>: 뚝섬은 성수 도보 15분, 더 한적·로컬. 반포는 무지개분수 (19:30·20:00·20:30·21:00) 명물이지만 외국인+관광객 많고 강남에서 다시 이동 필요. <b>5/1은 뚝섬 추천</b>, 반포 분수는 5/2 또는 5/3로.</li>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>응봉산</b>은 무료·24시간·승강기 X (계단 5분). 한강+서울숲+도심 동시. 외국인 가이드북에 안 나옴.</li>
+        <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>짐 권장</b>: 가벼운 자켓 (5월 초 일교차 큼), 우산 (5월 평균 강수일 8일), 보조배터리, 텀블러 (어니언 할인).</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ─── Tab: TIPS ─── -->
+<div class="tab-content" id="tab-tips">
+  <section>
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">04</span>Heads Up</h2>
+        <p>이번 일정에서만 신경쓰면 되는 것들</p>
+      </div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip">
+        <div class="tip-num">01 · BUKCHON</div>
+        <h4>북촌 가회동 시간 제한</h4>
+        <p>2024.11~ 시행. 가회동 일부 골목 <b>10:00–17:00 외 진입 시 100,000원 과태료</b>.</p>
+        <ul>
+          <li>야경 컷이 필요하면 <b>삼청동 팔판길</b> 또는 <b>서순라길</b>로 대체</li>
+          <li>5/3 일요일은 북촌11길 메인 출입 제한</li>
+        </ul>
+      </div>
+      <div class="tip">
+        <div class="tip-num">02 · 1인 BBQ</div>
+        <h4>혼자 가도 마찰 없는 곳</h4>
+        <p>한국 BBQ는 대부분 2인분부터. 1인 가능 매장:</p>
+        <ul>
+          <li><b>새마을식당 논현</b> — 1인 메뉴 + 카운터석</li>
+          <li><b>마포숯불갈비</b> — 24시간</li>
+          <li><b>하동관 곰탕</b> — 1인 카운터 원조 (16시 마감 주의)</li>
+          <li><b>금돼지식당</b> — 1인도 받지만 2인분이 현실</li>
+        </ul>
+      </div>
+      <div class="tip">
+        <div class="tip-num">03 · POKÉMON 5/1</div>
+        <h4>오프닝 데이 혼잡 대비</h4>
+        <p>포켓몬 메가 페스타 2026 = 5/1~6/21. <b>5/1이 오프닝</b>이라 SNS 인파 가능.</p>
+        <ul>
+          <li>아침 일찍 오픈 직후가 아니면, 점심 직후 진입 (피크 회피)</li>
+          <li>3종 동시: 서울숲 비밀의 숲 + 메타몽 플레이그라운드 + 올리브영 N 성수 굿즈</li>
+          <li>굿즈 한정 수량 — 빠르게 솔드아웃 가능</li>
+        </ul>
+      </div>
+      <div class="tip">
+        <div class="tip-num">04 · DIOR SLOT</div>
+        <h4>디올 성수 슬롯 잡기</h4>
+        <p>앱 사전 예약. 황금연휴 토·일 대비 <b>5/1 평일 오후가 가장 한가</b>.</p>
+        <ul>
+          <li>11:00–14:00 슬롯이 카페+가든 콤보 베스트</li>
+          <li>워크인도 받지만 대기 시간 들쑥날쑥</li>
+          <li>음료 ₩12,000~ · 굿즈 별도</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Inter',sans-serif;font-weight:900;font-size:22px;letter-spacing:-.02em;margin:40px 0 16px">5/1 · 5/3 휴무 매트릭스</h3>
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr>
+            <th>시설</th>
+            <th class="center">5/1 (금) 근로자의 날</th>
+            <th class="center">5/3 (일)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>5대궁 (경복·창덕·덕수·창경·종묘)</td><td class="center ok">OPEN</td><td class="center ok">OPEN</td></tr>
+          <tr><td>국립중앙박물관 · 리움미술관</td><td class="center ok">OPEN</td><td class="center ok">OPEN</td></tr>
+          <tr><td>서울숲 · 디올 성수 · 포켓몬 페스타</td><td class="center ok">OPEN</td><td class="center ok">OPEN</td></tr>
+          <tr><td>북촌11길 메인 골목</td><td class="center ok">OPEN</td><td class="center no">출입제한</td></tr>
+          <tr><td>광장시장 빈티지관</td><td class="center ok">OPEN</td><td class="center warn">일부 휴무</td></tr>
+          <tr><td>남대문시장</td><td class="center ok">OPEN</td><td class="center no">다수 휴무</td></tr>
+          <tr><td>백화점 (신세계·롯데·더현대)</td><td class="center ok">OPEN</td><td class="center ok">OPEN</td></tr>
+          <tr><td>올리브영 명동타운</td><td class="center ok">OPEN</td><td class="center ok">OPEN</td></tr>
+          <tr><td>은행 · 관공서</td><td class="center no">휴무</td><td class="center no">휴무</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="foot-mark"><span class="dot"></span>SEOUL · IN</div>
+  <div>한국인의 외국인 시점 서울 인사이드 가이드</div>
+  <div style="margin-top:6px;font-size:11px;opacity:.6">2026.05.01 — 05.03 · 강남 자택 베이스 · Solo · 5명 전문가 리서치 통합</div>
+</footer>
+
+<script>
+// ──────────────────────────────────────────
+// DATA: 42 hand-picked spots (외국인 시점 + 히든 위주)
+// ──────────────────────────────────────────
+const SPOTS=[
+  // ===== 성수 / 서울숲 (Day 1 핵심) =====
+  {id:1,ko:"서울숲",en:"Seoul Forest",area:"성수동",cat:["hidden","night"],lat:37.5443,lng:127.0411,price:"무료",hours:"24시간",hook:"서울 센트럴파크. 사슴 방사장 + 5월 정원박람회 신록. 5/1~6/21 포켓몬 비밀의 숲 한정.",glyph:"森",cover:"c-green",badge:"5/1 코스",mapsQ:"Seoul Forest",day1:true,featured:true},
+  {id:2,ko:"포켓몬 메가 페스타 2026",en:"Pokémon Mega Festa",area:"성수동",cat:["hidden","culture"],lat:37.5421,lng:127.0570,price:"무료",hours:"5/1~6/21",hook:"30주년 한정 팝업. 메타몽 플레이그라운드 + 비밀의 숲 + 굿즈 라인. 5/1 오프닝.",glyph:"30",coverSub:"YEARS",cover:"c-amber",badge:"5/1 한정",mapsQ:"포켓몬 메가 페스타 성수",day1:true,featured:true},
+  {id:3,ko:"디올 성수",en:"Dior Seongsu",area:"성수동",cat:["shop","hidden"],lat:37.5454,lng:127.0589,price:"무료 · 카페 ₩12,000~",hours:"11:00–19:30",hook:"3년 한정 그린하우스형 팝업. 1,700㎡ 메탈메쉬 + 카페+가든. 앱 예약제.",glyph:"D",coverSub:"SEONGSU",cover:"c-mono",mapsQ:"Dior Seongsu",day1:true},
+  {id:4,ko:"어니언 성수",en:"Onion Seongsu",area:"성수동",cat:["cafe","hidden"],lat:37.5448,lng:127.0566,price:"₩11,500 (빵+커피)",hours:"08:00–22:00",hook:"폐공장을 그대로 살린 베이커리 카페. 안국점보다 줄 짧고 천장 높음.",glyph:"O",coverSub:"ONION",cover:"c-rose",mapsQ:"Cafe Onion Seongsu",day1:true},
+  {id:5,ko:"펠릭스 포스터 월",en:"Felix Poster Wall",area:"성수동",cat:["hidden"],lat:37.5444,lng:127.0560,price:"무료",hours:"24시간",hook:"인스타 시그니처 노란 포스터 벽. 성수 카페거리 한복판.",glyph:"FX",cover:"c-amber",mapsQ:"Felix Poster Wall Seongsu",day1:true},
+  {id:6,ko:"하우스 노웨어",en:"HAUS NOWHERE",area:"성수동",cat:["shop","culture"],lat:37.5444,lng:127.0570,price:"무료",hours:"11:00–21:00",hook:"젠틀몬스터 14층 SF 미학 플래그십. 럭셔리 + 이머시브 아트.",glyph:"GM",cover:"c-mono",mapsQ:"HAUS NOWHERE Seongsu",day1:true},
+  {id:7,ko:"대림창고 갤러리",en:"Daelim Changgo",area:"성수동",cat:["cafe","hidden"],lat:37.5430,lng:127.0560,price:"커피 ₩7,000",hours:"11:00–22:00",hook:"창고 개조 카페·갤러리의 원조. 성수의 시작점.",glyph:"창",coverSub:"DAELIM",cover:"c-mono",mapsQ:"Daelim Changgo Seongsu",day1:true},
+  {id:8,ko:"뚝섬한강공원",en:"Ttukseom Hangang Park",area:"성수동",cat:["night","hidden"],lat:37.5306,lng:127.0660,price:"무료",hours:"24시간",hook:"성수에서 도보 15분. 치맥 배달 + 라면 자판기 + 일몰. 외국인 한강 입문.",glyph:"漢",cover:"c-blue",mapsQ:"Ttukseom Hangang Park",day1:true},
+  {id:9,ko:"응봉산 팔각정",en:"Eungbongsan Palgakjeong",area:"성수 옆",cat:["night","hidden"],lat:37.5485,lng:127.0306,price:"무료",hours:"24시간",hook:"한강 + 서울숲 + 도심 야경 동시. 외국인 안 아는 베스트 야경. N타워 대신.",glyph:"夜",cover:"c-night",badge:"hidden gem",mapsQ:"응봉산 팔각정"},
+
+  // ===== 익선동 / 종로 =====
+  {id:10,ko:"익선동 한옥거리",en:"Ikseon-dong Hanok",area:"종로",cat:["hidden","hanok"],lat:37.5717,lng:126.9892,price:"무료 산책",hours:"24시간",hook:"1920년대 한옥 미로. 도깨비 촬영지. 카페·바·식당 50+ 곳.",glyph:"瓦",cover:"c-rose",mapsQ:"Ikseondong Hanok"},
+  {id:11,ko:"청수당",en:"Cheongsudang Cafe",area:"익선동",cat:["cafe","hanok"],lat:37.5717,lng:126.9889,price:"커피 ₩7,500",hours:"11:00–22:00",hook:"대나무·등불 입구 시그니처 한옥 카페. 수플레 카스테라.",glyph:"清",coverSub:"SUDANG",cover:"c-rose",mapsQ:"Cheongsudang Ikseondong"},
+  {id:12,ko:"마당플라워카페",en:"Madang Flower Cafe",area:"익선동",cat:["cafe","hanok"],lat:37.5719,lng:126.9893,price:"커피 ₩9,000",hours:"11:00–22:00",hook:"꽃 가득 마당. 도깨비 드라마 촬영지.",glyph:"花",cover:"c-purple",mapsQ:"Madang Flower Cafe Ikseondong"},
+  {id:13,ko:"아트몬스터 익선동",en:"Art Monster Ikseondong",area:"익선동",cat:["hidden","food"],lat:37.5719,lng:126.9885,price:"맥주 ₩9,000~",hours:"17:00–02:00",hook:"한옥에서 마시는 수상 경력 수제맥주. 익선동 야간 코어.",glyph:"AM",cover:"c-amber",mapsQ:"Art Monster Ikseondong"},
+
+  // ===== 을지로 / 힙지로 =====
+  {id:14,ko:"을지로 노가리 골목",en:"Euljiro Nogari Alley",area:"을지로3가",cat:["food","hidden"],lat:37.5664,lng:126.9923,price:"노가리+생맥주 ₩6,000",hours:"17:00–24:00",hook:"1980년 시작. 한국 최저 가격대 호프 거리. 외국인 못 찾는 진짜 로컬.",glyph:"OB",coverSub:"NOGARI",cover:"c-amber",mapsQ:"을지로 노가리 골목"},
+  {id:15,ko:"세운상가 옥상",en:"Sewoon Plaza Rooftop",area:"을지로",cat:["night","hidden"],lat:37.5664,lng:126.9919,price:"무료",hours:"~22:00",hook:"무료 옥상 산책로. 도심 네온 + 노을. 〈Ready Player One〉 분위기.",glyph:"世",coverSub:"SEWOON",cover:"c-night",mapsQ:"Sewoon Plaza Rooftop"},
+  {id:16,ko:"머리조심",en:"Meorijosim Bar",area:"을지로",cat:["hidden","night"],lat:37.5666,lng:126.9930,price:"칵테일 ₩16,000",hours:"19:00–02:00",hook:"셔터 내린 작은 문 — 머리 숙여 입장하는 비밀 바.",glyph:"ZZ",cover:"c-night",badge:"secret",mapsQ:"머리조심 을지로"},
+  {id:17,ko:"신성다방",en:"Sinseong Tabang",area:"을지로",cat:["cafe","hidden"],lat:37.5667,lng:126.9926,price:"₩6,000",hours:"11:00–22:00",hook:"1970s 레트로 다방. 진짜 옛날 도시 분위기.",glyph:"茶",cover:"c-amber",mapsQ:"신성다방 을지로"},
+
+  // ===== 서순라길 / 종묘 =====
+  {id:18,ko:"서순라길",en:"Seosulla-gil",area:"종로",cat:["hanok","hidden"],lat:37.5736,lng:126.9930,price:"무료",hours:"24시간",hook:"종묘 동쪽 돌담 1km. 한옥 카페·주얼리 골목. 북촌의 비밀 백업.",glyph:"瓦",coverSub:"SEOSULLA",cover:"c-mono",mapsQ:"Seosulla-gil"},
+  {id:19,ko:"종묘",en:"Jongmyo Shrine",area:"종로",cat:["hanok"],lat:37.5742,lng:126.9945,price:"₩1,000",hours:"09:00–18:00 (화 휴)",hook:"UNESCO. 평일 가이드투어 필수, 토·일은 자유관람 — 5/2(토)가 골든.",glyph:"宗",cover:"c-mono",mapsQ:"Jongmyo Shrine Seoul"},
+
+  // ===== 부암동 / 삼청동 =====
+  {id:20,ko:"백사실 계곡",en:"Baeksasil Valley",area:"부암동",cat:["hidden","night"],lat:37.5934,lng:126.9606,price:"무료",hours:"24시간",hook:"도심에서 30분. 진짜 계곡, 도롱뇽 서식지. 5월 신록 압권.",glyph:"溪",cover:"c-green",mapsQ:"백사실 계곡"},
+  {id:21,ko:"산모퉁이 카페",en:"Sanmotoonge Cafe",area:"부암동",cat:["cafe","hidden"],lat:37.5921,lng:126.9618,price:"₩8,000",hours:"11:00–22:00",hook:"〈커피프린스 1호점〉 촬영지. 부암동 산자락 뷰.",glyph:"山",coverSub:"COFFEE",cover:"c-green",mapsQ:"Sanmotoonge Cafe"},
+  {id:22,ko:"환기미술관",en:"Whanki Museum",area:"부암동",cat:["culture","hidden"],lat:37.5917,lng:126.9601,price:"₩18,000",hours:"10:00–18:00 (월 휴)",hook:"한국 추상화 거장 김환기 단독 미술관. 부암동 조용한 골목.",glyph:"美",cover:"c-blue",mapsQ:"Whanki Museum"},
+  {id:23,ko:"삼청동 팔판길",en:"Samcheong Palpan-gil",area:"삼청동",cat:["hanok","cafe"],lat:37.5832,lng:126.9806,price:"무료 산책",hours:"24시간",hook:"메인 거리 말고 팔판길. 진짜 로컬 한옥 카페.",glyph:"八",cover:"c-rose",mapsQ:"Samcheong Palpangil"},
+  {id:24,ko:"국립현대미술관 서울관",en:"MMCA Seoul",area:"삼청동",cat:["culture"],lat:37.5790,lng:126.9810,price:"₩4,000",hours:"10:00–18:00 (수·토 ~21:00)",hook:"외국인이 가장 추천하는 현대미술관. 삼청동 입구.",glyph:"M",coverSub:"MMCA",cover:"c-mono",mapsQ:"MMCA Seoul"},
+
+  // ===== 북촌 (제한 시간) =====
+  {id:25,ko:"백인제 가옥",en:"Baek In-je House",area:"북촌",cat:["hanok","hidden"],lat:37.5821,lng:126.9849,price:"무료",hours:"09:00–18:00 (월 휴)",hook:"1913년 한옥+일본식 복도 하이브리드. 북촌 안에서 가장 한적.",glyph:"百",cover:"c-mono",mapsQ:"Baek In-je House"},
+  {id:26,ko:"북촌 가회동 31번지",en:"Bukchon 31",area:"북촌",cat:["hanok"],lat:37.5827,lng:126.9836,price:"무료",hours:"진입 10:00–17:00",hook:"메인 사진 스팟. 17시 이후 진입 시 ₩100,000 과태료 (2024.11~).",glyph:"31",cover:"c-rose",badge:"10–17시만",mapsQ:"Bukchon Hanok Village"},
+
+  // ===== 연남 / 망원 / 연희 =====
+  {id:27,ko:"경의선숲길",en:"Gyeongui Line Forest Park",area:"연남동",cat:["hidden","night"],lat:37.5598,lng:126.9244,price:"무료",hours:"24시간",hook:"폐선 철도 6.3km 선형 공원. 5월 신록 베스트.",glyph:"線",coverSub:"GYEONGUI",cover:"c-green",mapsQ:"Gyeongui Line Forest Park"},
+  {id:28,ko:"카페 테텀",en:"Cafe Teteum",area:"연남동",cat:["cafe","hidden"],lat:37.5615,lng:126.9233,price:"₩7,000",hours:"11:00–22:00",hook:"빨간안경 곰 시그니처. 굿즈샵 겸 카페.",glyph:"T",coverSub:"TETEUM",cover:"c-rose",mapsQ:"Cafe Teteum"},
+  {id:29,ko:"유어마인드",en:"Your Mind",area:"연희동",cat:["hidden","culture"],lat:37.5660,lng:126.9275,price:"무료 입장",hours:"13:00–20:00 (수 휴)",hook:"한국 인디 출판의 메카. 사진집·에세이 큐레이션.",glyph:"YM",cover:"c-mono",mapsQ:"Your Mind bookshop"},
+  {id:30,ko:"망원시장",en:"Mangwon Market",area:"망원동",cat:["food","hidden"],lat:37.5557,lng:126.9046,price:"₩2,000~5,000",hours:"09:00–22:00",hook:"진짜 동네 시장. 고로케·꽈배기·닭강정. 로컬:관광객 7:3.",glyph:"望",coverSub:"MANGWON",cover:"c-amber",mapsQ:"Mangwon Market"},
+  {id:31,ko:"망원한강공원",en:"Mangwon Hangang",area:"망원동",cat:["night","hidden"],lat:37.5550,lng:126.8985,price:"무료",hours:"24시간",hook:"한강 노을 + 자전거 + 돗자리 + 편의점 라면. 조용한 마무리.",glyph:"江",cover:"c-blue",mapsQ:"Mangwon Hangang Park"},
+
+  // ===== 이태원 / 해방촌 / 한남 =====
+  {id:32,ko:"오리올 HBC",en:"Oriole HBC",area:"해방촌",cat:["cafe","night"],lat:37.5409,lng:126.9903,price:"커피 ₩7,000",hours:"12:00–24:00",hook:"가수 정엽 운영. 해방촌 시그니처 옥상 카페·바.",glyph:"OR",cover:"c-night",mapsQ:"Oriole HBC Haebangchon"},
+  {id:33,ko:"해방촌 108계단",en:"Haebangchon 108 Stairs",area:"해방촌",cat:["hidden","night"],lat:37.5430,lng:126.9866,price:"무료",hours:"24시간",hook:"산동네 108 계단 노을. 마을 뷰 + 남산 정면.",glyph:"108",cover:"c-night",mapsQ:"해방촌 108계단"},
+  {id:34,ko:"올댓재즈",en:"All That Jazz",area:"이태원",cat:["culture","night"],lat:37.5346,lng:126.9943,price:"입장 ₩12,000+",hours:"19:00–02:00",hook:"1976년. 한국 최초 재즈클럽. 라이브 매일.",glyph:"♪",coverSub:"JAZZ",cover:"c-night",mapsQ:"All That Jazz Itaewon"},
+
+  // ===== 강남 (시그니처) =====
+  {id:35,ko:"봉은사",en:"Bongeunsa Temple",area:"강남",cat:["hanok","culture"],lat:37.5152,lng:127.0577,price:"무료",hours:"03:00–22:00",hook:"강남 한복판 1,200년 사찰. 23m 미륵대불 vs 555m 롯데타워.",glyph:"佛",cover:"c-mono",mapsQ:"Bongeunsa Temple"},
+  {id:36,ko:"코엑스 별마당 도서관",en:"Starfield Library COEX",area:"강남",cat:["culture","shop"],lat:37.5126,lng:127.0590,price:"무료",hours:"10:30–22:00",hook:"13m 책장 + 50,000+ 도서. K-pop 라이트스틱·BT21·라이언 한 빌딩.",glyph:"S",coverSub:"STARFIELD",cover:"c-mono",mapsQ:"Starfield COEX Mall"},
+  {id:37,ko:"젠틀몬스터 신사",en:"Gentle Monster Sinsa",area:"신사",cat:["shop"],lat:37.5224,lng:127.0386,price:"무료 입장",hours:"11:00–21:00",hook:"선글라스 매장이 아니라 SF 미술관. K-pop 화보 단골 배경.",glyph:"GM",coverSub:"FLAGSHIP",cover:"c-mono",mapsQ:"Gentle Monster Sinsa"},
+  {id:38,ko:"도산공원",en:"Dosan Park",area:"압구정",cat:["hidden","cafe"],lat:37.5239,lng:127.0388,price:"무료",hours:"24시간",hook:"강남 5분. 셀럽 단골 카페 골목. Nudake 본점.",glyph:"道",cover:"c-green",mapsQ:"Dosan Park Seoul"},
+
+  // ===== 한복 / 메인 =====
+  {id:39,ko:"한복남",en:"Hanboknam",area:"경복궁역",cat:["culture"],lat:37.5779,lng:126.9737,price:"4h ₩18,000",hours:"09:00–19:00",hook:"Klook 8% 할인. 정통 한복 → 5대궁 무료 입장. D-3 예약.",glyph:"韓",coverSub:"HANBOK",cover:"c-rose",mapsQ:"Hanboknam Hanbok"},
+  {id:40,ko:"경복궁",en:"Gyeongbokgung",area:"종로",cat:["hanok","culture"],lat:37.5796,lng:126.9770,price:"₩3,000 (한복 무료)",hours:"09:00–18:00 (화 휴)",hook:"수문장 교대 10:00·14:00. 한 번은 통과의례. 5/2 토 자유관람.",glyph:"景",coverSub:"FUKUNG",cover:"c-mono",mapsQ:"Gyeongbokgung Palace"},
+
+  // ===== 광장시장 / 식음 =====
+  {id:41,ko:"광장시장",en:"Gwangjang Market",area:"종로",cat:["food","hidden"],lat:37.5704,lng:127.0027,price:"₩3,000~24,000",hours:"09:00–22:00 (일 일부 휴)",hook:"마약김밥·빈대떡·육회. 카드 OK (2023~). 5/3 일부 휴무 주의.",glyph:"廣",coverSub:"MARKET",cover:"c-amber",mapsQ:"Gwangjang Market Seoul"},
+  {id:42,ko:"하동관 명동",en:"Hadongkwan",area:"명동",cat:["food"],lat:37.5631,lng:126.9849,price:"곰탕 ₩16,000",hours:"07:00–16:00 (4시 마감!)",hook:"1939 노포. Michelin Bib Gourmand. 1인 카운터 원조.",glyph:"河",coverSub:"GOMTANG",cover:"c-amber",badge:"16시 마감",mapsQ:"Hadongkwan Myeongdong"},
+];
+
+// ──────────────────────────────────────────
+// CARD RENDERING
+// ──────────────────────────────────────────
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderCard(s,opts={}){
+  const mapsUrl="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.mapsQ);
+  const usd=Math.round(parseInt((s.price.match(/[\d,]+/)||["0"])[0].replace(/,/g,""))/1400);
+  const usdStr=usd>0?"<span class='usd'>≈$"+usd+"</span>":"";
+  const badgeHtml=s.badge?`<span class="badge ${s.badge.includes("5/1")||s.badge.includes("hidden")||s.badge.includes("secret")?"pink":"amber"}">${escapeHtml(s.badge)}</span>`:"";
+  const featuredCls=opts.featured?" featured":"";
+  const sub=s.coverSub?`<span class="sub">${s.coverSub}</span>`:"";
+  return `
+    <a class="card${featuredCls}" href="${mapsUrl}" target="_blank" rel="noopener">
+      <div class="card-cover ${s.cover||""}">
+        <div class="cover-glyph">${s.glyph||"·"}${sub}</div>
+        <div class="badge-row">
+          <span class="badge dark">${escapeHtml(s.area)}</span>
+          ${badgeHtml}
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="card-name-ko">${escapeHtml(s.ko)}</div>
+          <div class="card-name-en">${escapeHtml(s.en)}</div>
+        </div>
+        <div class="card-hook">${escapeHtml(s.hook)}</div>
+        <div class="card-meta">
+          <span>${escapeHtml(s.hours)}</span>
+        </div>
+      </div>
+      <div class="card-foot">
+        <span class="card-price">${escapeHtml(s.price)}${usdStr}</span>
+        <span>Maps →</span>
+      </div>
+    </a>`;
+}
+
+const grid=document.getElementById("cardGrid");
+function applyFilter(cat){
+  const data=cat==="all"?SPOTS:SPOTS.filter(s=>s.cat.includes(cat));
+  // Featured 5/1 first within "all"
+  const sorted=cat==="all"?[...data].sort((a,b)=>(b.featured?1:0)-(a.featured?1:0)):data;
+  grid.innerHTML=sorted.map(s=>renderCard(s,{featured:s.featured&&cat==="all"})).join("");
+}
+applyFilter("all");
+
+document.getElementById("catChips").addEventListener("click",e=>{
+  const btn=e.target.closest(".chip");if(!btn)return;
+  document.querySelectorAll("#catChips .chip").forEach(c=>c.classList.remove("active"));
+  btn.classList.add("active");
+  applyFilter(btn.dataset.cat);
+});
+
+// Day1 grid
+document.getElementById("day1Grid").innerHTML=SPOTS.filter(s=>s.day1).map(s=>renderCard(s)).join("");
+
+// ──────────────────────────────────────────
+// TAB SWITCHING
+// ──────────────────────────────────────────
+let mapInited=false;
+let leafletMap=null;
+document.getElementById("topNav").addEventListener("click",e=>{
+  const btn=e.target.closest("button");if(!btn)return;
+  document.querySelectorAll("#topNav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.getElementById("tab-"+btn.dataset.tab).classList.add("active");
+  if(btn.dataset.tab==="map"&&!mapInited){initMap();mapInited=true}
+  if(btn.dataset.tab==="map"&&leafletMap){setTimeout(()=>leafletMap.invalidateSize(),60)}
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+// ──────────────────────────────────────────
+// MAP
+// ──────────────────────────────────────────
+function initMap(){
+  leafletMap=L.map("mapHolder",{scrollWheelZoom:true}).setView([37.5560,127.0],11.6);
+  L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{
+    attribution:"&copy; OpenStreetMap &copy; CARTO",
+    subdomains:"abcd",maxZoom:19
+  }).addTo(leafletMap);
+
+  const colorMap={hidden:"#ec4899",cafe:"#f59e0b",food:"#dc2626",night:"#1e1b4b",hanok:"#b91c1c",culture:"#0c4a6e",shop:"#15803d"};
+  const bounds=[];
+  SPOTS.forEach(s=>{
+    const primary=s.cat[0]||"hidden";
+    const color=colorMap[primary]||"#ec4899";
+    const isFeatured=s.featured;
+    const radius=isFeatured?12:8;
+    const marker=L.circleMarker([s.lat,s.lng],{
+      radius,weight:2,color:"#fff",fillColor:color,fillOpacity:.95
+    }).addTo(leafletMap);
+    const mapsUrl="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(s.mapsQ);
+    marker.bindPopup(`
+      <div class="pop-ko">${escapeHtml(s.ko)} ${isFeatured?"★":""}</div>
+      <div class="pop-en">${escapeHtml(s.en)} · ${escapeHtml(s.area)}</div>
+      <div class="pop-hook">${escapeHtml(s.hook)}</div>
+      <div style="font-size:11px;color:#94a3b8;margin-top:6px">${escapeHtml(s.hours)} · ${escapeHtml(s.price)}</div>
+      <a class="pop-link" href="${mapsUrl}" target="_blank">Google Maps →</a>
+    `);
+    bounds.push([s.lat,s.lng]);
+  });
+  leafletMap.fitBounds(bounds,{padding:[24,24]});
+}
+
+</script>
+</body>
+</html>
