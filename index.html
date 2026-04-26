@@ -175,6 +175,19 @@
   .sub-h3{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.02em;margin:32px 0 12px;display:flex;align-items:baseline;gap:10px}
   .sub-h3 .k{font-size:13px;font-weight:600;color:var(--ink-mute);font-family:'Noto Sans KR',sans-serif;letter-spacing:0}
 
+  /* ── Version pills ─────────────────────────────────── */
+  .ver-pills{display:flex;gap:0;margin-bottom:18px;background:var(--bg-soft);border-radius:14px;padding:5px;flex-wrap:wrap}
+  .ver-pill{flex:1;min-width:120px;padding:10px 14px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;transition:all .15s;background:transparent}
+  .ver-pill:hover{background:rgba(255,255,255,.6)}
+  .ver-pill.active{background:#fff;box-shadow:var(--shadow)}
+  .ver-pill .v-name{font-family:'Inter',sans-serif;font-weight:900;font-size:13.5px;letter-spacing:-.02em;color:var(--ink-soft);line-height:1.1}
+  .ver-pill.active .v-name{color:var(--ink)}
+  .ver-pill .v-desc{font-size:10.5px;color:var(--ink-mute);font-weight:600;letter-spacing:.01em}
+  .ver-pill[data-ver="v2"].active .v-name{color:var(--blue)}
+  .ver-pill[data-ver="v3"].active .v-name{color:var(--red)}
+  .version-wrap{display:none}
+  .version-wrap.active{display:block}
+
   /* ── Day pills ─────────────────────────────────── */
   .day-pills{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}
   .day-pill{padding:10px 18px;border-radius:12px;background:#fff;border:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;transition:all .15s;min-width:96px}
@@ -242,7 +255,9 @@
     <nav class="nav" id="topNav">
       <button data-tab="home" class="active">Browse</button>
       <button data-tab="map">Map</button>
-      <button data-tab="itin">Itinerary</button>
+      <button data-tab="tripA">Trip A</button>
+      <button data-tab="tripB">Trip B</button>
+      <button data-tab="tripC">Trip C</button>
       <button data-tab="tips">Tips</button>
     </nav>
   </div>
@@ -361,25 +376,25 @@
   </section>
 </div>
 
-<!-- ─── Tab: ITINERARY ─── -->
-<div class="tab-content" id="tab-itin">
+<!-- ─── Tab: TRIP A ─── -->
+<div class="tab-content" id="tab-tripA">
   <section>
     <div class="sec-head">
       <div class="sec-title">
-        <h2><span class="num">03</span>Itinerary</h2>
-        <p>강남 자택 베이스 · 4일 코스 · 히든·로컬 위주</p>
+        <h2><span class="num">03</span>Trip A</h2>
+        <p>부암동·익선동·을지로 + 연남·망원 · 골목 깊게 + 한강 노을</p>
       </div>
     </div>
 
-    <div class="day-pills" id="dayPills">
+    <div class="day-pills" data-trip="A">
       <button class="day-pill active" data-day="d1"><span class="pdate">5/1 FRI</span><span class="plabel">성수 · 서울숲</span></button>
-      <button class="day-pill" data-day="d2"><span class="pdate">5/2 SAT</span><span class="plabel">강북 히든</span></button>
+      <button class="day-pill" data-day="d2"><span class="pdate">5/2 SAT</span><span class="plabel">부암 → 을지로</span></button>
       <button class="day-pill" data-day="d3"><span class="pdate">5/3 SUN</span><span class="plabel">연남 · 망원</span></button>
       <button class="day-pill" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실 드론쇼</span></button>
     </div>
 
     <!-- ───── Day 1 ───── -->
-    <div class="day-panel active" id="panel-d1">
+    <div class="day-panel active" data-day="d1" id="panel-d1">
 
     <div class="d1-stats">
       <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 22:00</div><div class="sub">약 12시간</div></div>
@@ -453,7 +468,7 @@
     </div><!-- /panel-d1 -->
 
     <!-- ───── Day 2 ───── -->
-    <div class="day-panel" id="panel-d2">
+    <div class="day-panel" data-day="d2" id="panel-d2">
       <div class="d1-stats">
         <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 23:30</div><div class="sub">약 13시간</div></div>
         <div class="d1-stat"><div class="lab">도보</div><div class="val">~9 km</div><div class="sub">부암동 + 북촌 + 골목 다회</div></div>
@@ -535,7 +550,7 @@
     </div><!-- /panel-d2 -->
 
     <!-- ───── Day 3 ───── -->
-    <div class="day-panel" id="panel-d3">
+    <div class="day-panel" data-day="d3" id="panel-d3">
       <div class="d1-stats">
         <div class="d1-stat"><div class="lab">기간</div><div class="val">11:00 → 19:30</div><div class="sub">~8.5시간</div></div>
         <div class="d1-stat"><div class="lab">도보</div><div class="val">~7 km</div><div class="sub">경의선숲길 + 망원시장</div></div>
@@ -580,7 +595,7 @@
     </div><!-- /panel-d3 -->
 
     <!-- ───── Day 5 (Bonus) ───── -->
-    <div class="day-panel" id="panel-d5">
+    <div class="day-panel" data-day="d5" id="panel-d5">
 
       <!-- Drone show featured banner -->
       <div class="day1-feature" style="margin-bottom:24px">
@@ -677,6 +692,301 @@
         </ul>
       </div>
     </div><!-- /panel-d5 -->
+
+  </section>
+</div>
+
+<!-- ─── Tab: TRIP B ─── -->
+<div class="tab-content" id="tab-tripB">
+  <section>
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">03</span>Trip B</h2>
+        <p>한남·해방촌·이태원 / 서촌·통의·인왕산·청와대 mix</p>
+      </div>
+    </div>
+
+    <div class="day-pills" data-trip="B">
+      <button class="day-pill active" data-day="d1"><span class="pdate">5/1 FRI</span><span class="plabel">성수 · 서울숲</span></button>
+      <button class="day-pill" data-day="d2"><span class="pdate">5/2 SAT</span><span class="plabel">한남 → 이태원</span></button>
+      <button class="day-pill" data-day="d3"><span class="pdate">5/3 SUN</span><span class="plabel">서촌 → 인왕산</span></button>
+      <button class="day-pill" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실 드론쇼</span></button>
+    </div>
+
+    <!-- Trip B / Day 1 (공통) -->
+    <div class="day-panel active" data-day="d1" id="panel-B-d1">
+      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
+        <b>5/1 (금) 성수·서울숲</b>은 모든 Trip 공통입니다. 자세한 시간대별 동선은 <b>Trip A</b> 탭을 참고하세요. 아래는 권역 핵심 스팟.
+      </div>
+      <div class="grid" id="B-day1Grid"></div>
+    </div>
+
+    <!-- Trip B / Day 2 -->
+    <div class="day-panel" data-day="d2" id="panel-B-d2">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">13:00 → 24:00</div><div class="sub">~11시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~6 km</div><div class="sub">한남↔해방촌↔이태원</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩180k</div><div class="sub">미술관+옵션 칵테일</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">한남 / 해방촌 / 이태원</div><div class="sub">미술관 + 옥상 + 재즈</div></div>
+      </div>
+
+      <h3 class="sub-h3">사전 체크</h3>
+      <div class="booking">
+        <div class="bk urgent">
+          <span class="when">D-7 · 리움</span>
+          <span class="what">Leeum Museum 사전예약</span>
+          <span class="how">leeum.org · 시간대별 슬롯 · 5/2 토 만석 빠름</span>
+        </div>
+        <div class="bk">
+          <span class="when">D-3 · 옥상바</span>
+          <span class="what">Privilege Mondrian 예약</span>
+          <span class="how">호텔 컨시어지 또는 워크인. 22시 이후 만석 가능.</span>
+        </div>
+        <div class="bk">
+          <span class="when">D-Day · 짐</span>
+          <span class="what">자켓 + 편한 신발</span>
+          <span class="how">해방촌 108계단 + 한남 골목 도보 多. 5월 야간 일교차 큼.</span>
+        </div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 한남 ▸ 해방촌 ▸ 이태원</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">13:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남역 → 한강진역 <span class="en">Line 6</span></div><div class="tl-note">9호선 신논현 → 4호선 동작 → 6호선 한강진. 또는 택시 (~₩9,000).</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">13:30<span class="dur">~135분</span></div><div class="tl-body"><div class="tl-place">리움미술관 <span class="en">Leeum Museum</span></div><div class="tl-note">3건축가(보타·누벨·콜하스) 협업. 백자·고미술 + 현대미술. 영문 오디오 가이드 OK.</div><div class="tl-meta"><span class="cost">₩20,000</span><span>월 휴 (5/2 토 정상)</span><span>예약 필수</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:45<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">한남동 산책 + 마지셔우드 <span class="en">Hannam-dong walk + Margesherwood</span></div><div class="tl-note">한남대로 골목. Margesherwood 가죽 가방 플래그십에서 커피 + 매장 구경.</div><div class="tl-meta"><span class="cost">커피 ₩7,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">17:00<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">한남 → 해방촌 도보 <span class="en">walk · 1.2km</span></div><div class="tl-note">남산 자락 따라 골목 도보. 분위기 좋음.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:15<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">늘담 옥상 카페 <span class="en">Nuldam Space</span></div><div class="tl-note">한강 + 도심 + 남산타워 3방향 옥상. 해방촌 시그니처. 노을 시간대 베스트.</div><div class="tl-meta"><span class="cost">₩7,500</span><span>5월 일몰 19:30</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">해방촌 108계단 <span class="en">Haebangchon 108 Stairs</span></div><div class="tl-note">산동네 108계단 노을 + 마을 뷰. 무료. 늘담 옥상에서 도보 5분.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:00<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">해방촌 디너 <span class="en">HBC Dinner</span></div><div class="tl-note">해방촌 신흥로 글로벌 식당 골목. 멕시칸·이탈리안·튀르키예 등 이태원 외국인 거주민 단골. 영문 메뉴 100%.</div><div class="tl-meta"><span class="cost">₩30,000~50,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">20:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">해방촌 → 이태원 도보 <span class="en">walk · 700m</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">20:30<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">올댓재즈 <span class="en">All That Jazz</span></div><div class="tl-note">1976년 시작. 한국 최초 재즈클럽. 라이브 매일. 예약 권장.</div><div class="tl-meta"><span class="cost">입장 ₩12,000+</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">22:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">Privilege @ Mondrian Itaewon <span class="en">Mondrian Hotel Rooftop</span></div><div class="tl-note">호텔 옥상 360° 뷰. 남산타워 정면. 야경 + 칵테일 마무리.</div><div class="tl-meta"><span class="cost">칵테일 ₩25,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">24:00<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Taxi · ~₩14,000</span></div><div class="tl-note">막차 끊김. 카카오T 호출.</div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 한남·해방촌·이태원 권역</span></h3>
+      <div class="grid" id="B-day2Grid"></div>
+
+      <h3 class="sub-h3">5/2 메모 (Trip B)</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>리움 사전예약</b>: leeum.org · 5/2 토 황금연휴 만석 빠름 · D-7 권장.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>해방촌 108계단</b>: 노을 30분 전 도착. 보호 난간 X — 사진 조심.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>옥상바 옵션</b>: Privilege 대신 KLOUD@AC Hotel(강남) · M29@Fairmont(여의도) · Floating@L7(명동) 등.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때</b>: 리움 → 한남 카페 → DDP 야간 → 강남 복귀.</li>
+        </ul>
+      </div>
+    </div><!-- /panel-B-d2 -->
+
+    <!-- Trip B / Day 3 -->
+    <div class="day-panel" data-day="d3" id="panel-B-d3">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 19:30</div><div class="sub">~9.5시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~8 km</div><div class="sub">서촌 + 인왕산 자락</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩60k</div><div class="sub">서촌 점심+카페</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">서촌 / 인왕산 / 청와대</div><div class="sub">고궁 옆 조용한 동네</div></div>
+      </div>
+
+      <h3 class="sub-h3">사전 체크</h3>
+      <div class="booking">
+        <div class="bk urgent">
+          <span class="when">D-3 · 청와대</span>
+          <span class="what">Cheongwadae 입장 예약</span>
+          <span class="how">opencheongwadae.kr · 무료지만 슬롯제 · 5/3 일 만석 빠름</span>
+        </div>
+        <div class="bk">
+          <span class="when">D-Day · 신발</span>
+          <span class="what">운동화 필수</span>
+          <span class="how">인왕산 자락길 무장애 데크 + 청와대 길 + 부암동 산자락 모두 도보 多.</span>
+        </div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 통의 ▸ 통인 ▸ 인왕산 ▸ 청와대 ▸ 부암</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">10:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">강남 → 경복궁역 <span class="en">Line 3</span></div><div class="tl-note">3호선 직통. 3번 출구 → 통의동 골목.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">10:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">Mk2 카페 + 대오서점 <span class="en">Mk2 + Daeo Bookstore</span></div><div class="tl-note">통의동 골목 시네필 카페 + 1951년 헌책방. 5/3 일 정상 영업.</div><div class="tl-meta"><span class="cost">~₩11,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">통인시장 도시락 카페 <span class="en">Tongin Market Lunch Box</span></div><div class="tl-note">엽전으로 시장 반찬 도시락 만들기. 11~16시 운영. 외국인·로컬 다 좋아함.</div><div class="tl-meta"><span class="cost">₩5,000~8,000</span><span>16시 마감</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">13:15<span class="dur">~20분</span></div><div class="tl-body"><div class="tl-place">통인시장 → 인왕산 자락길 입구 <span class="en">walk · 1km</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">13:30<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">인왕산 자락길 산책 <span class="en">Inwangsan Skyway Trail</span></div><div class="tl-note">무장애 데크 1시간 + 옵션 정상 1시간. 5월 신록 압권. 도심 한눈에.</div><div class="tl-meta"><span class="cost">무료</span><span>5월 best</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:30<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">청와대 <span class="en">Cheongwadae</span></div><div class="tl-note">2022년부터 일반 개방. 5월 신록 + 영빈관·관저 산책. 사전예약.</div><div class="tl-meta"><span class="cost">무료</span><span>예약</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">17:00<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">청와대 → 부암동 <span class="en">walk or 1020번 버스</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:15<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">산모퉁이 카페 노을 <span class="en">Sanmotoonge Cafe</span></div><div class="tl-note">〈커피프린스 1호점〉 촬영지. 부암동 산자락 노을. 5월 일몰 19:25.</div><div class="tl-meta"><span class="cost">₩8,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">부암동 동네 디너 또는 강남 복귀 <span class="en">option</span></div><div class="tl-note">부암동 한식·양식 작은 식당 또는 강남 복귀해서 가벼운 마무리.</div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 서촌·통의·인왕·청와대 권역</span></h3>
+      <div class="grid" id="B-day3Grid"></div>
+
+      <h3 class="sub-h3">5/3 메모 (Trip B)</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>통인시장 16시 마감</b>. 점심 12~13시 권장. 도시락 인기 메뉴는 12:30 직전 솔드아웃 가능.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>청와대 슬롯</b>: 사전예약 무료. 5/3 일 황금연휴 인기 → D-3 권장. 2시간 슬롯제.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>대오서점 입장료</b> ₩5,000 = 음료 1잔 포함. 1951년 서울 최古 헌책방. 사진 OK.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때</b>: 인왕산 X → 서촌 골목 카페 + 청와대 (실내) → 부암동 환기미술관 (월 휴, 5/3 일 정상).</li>
+        </ul>
+      </div>
+    </div><!-- /panel-B-d3 -->
+
+    <!-- Trip B / Day 5 (공통) -->
+    <div class="day-panel" data-day="d5" id="panel-B-d5">
+      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
+        <b>5/5 (화) 잠실 드론쇼</b>는 모든 Trip 공통입니다. 자세한 시간대별 동선은 <b>Trip A</b> 탭을 참고하세요. 아래는 권역 핵심 스팟.
+      </div>
+      <div class="grid" id="B-day5Grid"></div>
+    </div>
+
+  </section>
+</div>
+
+<!-- ─── Tab: TRIP C ─── -->
+<div class="tab-content" id="tab-tripC">
+  <section>
+    <div class="sec-head">
+      <div class="sec-title">
+        <h2><span class="num">03</span>Trip C</h2>
+        <p>동대문·청계천·인사동·종로 / 연희·망원·서교 mix</p>
+      </div>
+    </div>
+
+    <div class="day-pills" data-trip="C">
+      <button class="day-pill active" data-day="d1"><span class="pdate">5/1 FRI</span><span class="plabel">성수 · 서울숲</span></button>
+      <button class="day-pill" data-day="d2"><span class="pdate">5/2 SAT</span><span class="plabel">동대문 → 을지로</span></button>
+      <button class="day-pill" data-day="d3"><span class="pdate">5/3 SUN</span><span class="plabel">연희 → 망원 → 서교</span></button>
+      <button class="day-pill" data-day="d5"><span class="pdate">5/5 TUE</span><span class="plabel">잠실 드론쇼</span></button>
+    </div>
+
+    <!-- Trip C / Day 1 (공통) -->
+    <div class="day-panel active" data-day="d1" id="panel-C-d1">
+      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
+        <b>5/1 (금) 성수·서울숲</b>은 모든 Trip 공통. 자세한 시간대별 동선은 <b>Trip A</b>.
+      </div>
+      <div class="grid" id="C-day1Grid"></div>
+    </div>
+
+    <!-- Trip C / Day 2 -->
+    <div class="day-panel" data-day="d2" id="panel-C-d2">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">13:00 → 23:30</div><div class="sub">~10.5시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~8 km</div><div class="sub">청계천 + 종로 골목</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩100k</div><div class="sub">시장+노가리+칵테일</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">동대문 / 청계 / 인사 / 을지</div><div class="sub">도심 도보 종일</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 인사 ▸ 청계 ▸ 광장 ▸ 익선 ▸ 을지 ▸ DDP</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">13:00<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 → 종각역 <span class="en">Line 1 직통</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">13:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">인사동 쌈지길 <span class="en">Insadong Ssamzigil</span></div><div class="tl-note">4층 나선형 골목 쇼핑. 한국 디자이너 + 전통공예. 옥상 정원.</div><div class="tl-meta"><span class="cost">무료 입장</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:45<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">청계천 산책 <span class="en">Cheonggyecheon walk</span></div><div class="tl-note">광화문 → 동대문 5.8km 중 일부 (2km, 30분). 도심 한복판 수공간.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">16:00<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">광장시장 <span class="en">Gwangjang Market</span></div><div class="tl-note">5/2 토 정상. 마약김밥(3,000원) + 빈대떡 + 육회 코스. 카드 OK.</div><div class="tl-meta"><span class="cost">~₩30,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">17:30<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">서순라길 → 종묘 외관 <span class="en">Seosulla-gil → Jongmyo</span></div><div class="tl-note">종묘 동쪽 돌담길 1km. 5/2 토 종묘 자유관람 (평일 가이드 X).</div><div class="tl-meta"><span class="cost">종묘 ₩1,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">익선동 카페·바 <span class="en">Ikseondong</span></div><div class="tl-note">청수당·마당플라워·아트몬스터. 한옥 마당 + 수제맥주.</div><div class="tl-meta"><span class="cost">~₩15,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">19:30<span class="dur">~10분</span></div><div class="tl-body"><div class="tl-place">익선동 → 을지로3가 <span class="en">walk · 800m</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">~90분</span></div><div class="tl-body"><div class="tl-place">을지로 노가리 골목 <span class="en">Euljiro Nogari Alley</span></div><div class="tl-note">을지OB베어. 노가리 ₩2,000 + 생맥주 ₩4,000. 한국 최저 호프 거리.</div><div class="tl-meta"><span class="cost">~₩12,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">21:00<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">머리조심 칵테일 <span class="en">Meorijosim</span></div><div class="tl-note">셔터 내린 작은 문 — 머리 숙여 입장. 비밀 칵테일 바.</div><div class="tl-meta"><span class="cost">₩16,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">22:30<span class="dur">~15분</span></div><div class="tl-body"><div class="tl-place">을지로 → DDP <span class="en">walk · 1.2km</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">22:45<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">DDP 야경 <span class="en">DDP at Night</span></div><div class="tl-note">자하 하디드 설계 곡면 외관 + LED 장미정원. 24시간 산책 가능.</div><div class="tl-meta"><span class="cost">무료</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">23:30<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Taxi · ~₩18,000</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 도심 권역</span></h3>
+      <div class="grid" id="C-day2Grid"></div>
+
+      <h3 class="sub-h3">5/2 메모 (Trip C)</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>광장시장 토요일 16시</b> = 외국인 인파 절정. 14~15시면 한가하지만 카메라 매너.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>종묘 5/2 토</b>는 자유관람. 평일은 가이드 동반 의무 → 토요일이 골든.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>DDP LED 장미정원</b>은 시즌별 라이팅 다름. 5월 봄 시즌 베스트.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때</b>: 인사동·청계 X → DDP 전시 (실내) + 광장시장 (지붕) + 익선동 한옥(처마).</li>
+        </ul>
+      </div>
+    </div><!-- /panel-C-d2 -->
+
+    <!-- Trip C / Day 3 -->
+    <div class="day-panel" data-day="d3" id="panel-C-d3">
+      <div class="d1-stats">
+        <div class="d1-stat"><div class="lab">기간</div><div class="val">10:00 → 22:00</div><div class="sub">~12시간</div></div>
+        <div class="d1-stat"><div class="lab">도보</div><div class="val">~9 km</div><div class="sub">연희 + 망원 한강</div></div>
+        <div class="d1-stat"><div class="lab">예상 예산</div><div class="val">₩90k</div><div class="sub">베이커리+책바</div></div>
+        <div class="d1-stat"><div class="lab">컨셉</div><div class="val">연희 / 망원 / 서교</div><div class="sub">홍대 옆 조용한 동네 종일</div></div>
+      </div>
+
+      <h3 class="sub-h3">시간대별 동선 <span class="k">— 매뉴팩트 ▸ 피터팬 ▸ 망원 ▸ 책바</span></h3>
+      <div class="timeline">
+        <div class="tl-row transit"><div class="tl-time">10:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">강남 → 홍대입구역 <span class="en">Line 2</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">10:30<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">매뉴팩트 커피 (연희) <span class="en">Manufact Coffee Roasters</span></div><div class="tl-note">챔피언 바리스타 로스터리. 연희동 조용한 골목. 핸드드립.</div><div class="tl-meta"><span class="cost">₩6,500</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">11:45<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">피터팬 1978 베이커리 <span class="en">Peterpan 1978</span></div><div class="tl-note">1978년 시작. 연희동 변천사 함께한 빵집. 식빵·앙버터.</div><div class="tl-meta"><span class="cost">₩4,000~6,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">12:45<span class="dur">~75분</span></div><div class="tl-body"><div class="tl-place">사러가 쇼핑센터 + 연희 점심 <span class="en">Sarugashopping + Yeonhui lunch</span></div><div class="tl-note">동네 슈퍼 + 연희동 골목 한식·양식 점심.</div><div class="tl-meta"><span class="cost">~₩15,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">14:00<span class="dur">~30분</span></div><div class="tl-body"><div class="tl-place">연희 → 망원 도보 <span class="en">walk · 2km</span></div><div class="tl-note">날씨 좋으면 도보 최고. 연남 경의선숲길 거쳐 망원 진입.</div></div></div>
+
+        <div class="tl-row"><div class="tl-time">14:30<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">망원시장 <span class="en">Mangwon Market</span></div><div class="tl-note">고로케·꽈배기·닭강정. 5/3 일 정상 영업.</div><div class="tl-meta"><span class="cost">~₩10,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">15:30<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">망원한강공원 — 노을 산책 <span class="en">Mangwon Hangang Park</span></div><div class="tl-note">한강 + 자전거 + 돗자리. 5월 일몰 19:25. 시장 간식 + 캔맥주.</div><div class="tl-meta"><span class="cost">~₩10,000</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">17:30<span class="dur">~20분</span></div><div class="tl-body"><div class="tl-place">망원 → 합정/서교 <span class="en">walk · 1.5km 또는 6호선</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">18:00<span class="dur">~60분</span></div><div class="tl-body"><div class="tl-place">합정 디너 <span class="en">Hapjeong dinner</span></div><div class="tl-note">합정 골목 한식·양식 식당. 책바 가기 전 가벼운 저녁.</div><div class="tl-meta"><span class="cost">~₩20,000</span></div></div></div>
+
+        <div class="tl-row"><div class="tl-time">19:30<span class="dur">~120분</span></div><div class="tl-body"><div class="tl-place">책바 (Book by Book) <span class="en">Book by Book Bar</span></div><div class="tl-note">책 + 위스키 컨셉 바. 정숙 모드. 한 권 골라 한 잔.</div><div class="tl-meta"><span class="cost">입장 ₩10,000 + 음료</span></div></div></div>
+
+        <div class="tl-row transit"><div class="tl-time">21:30<span class="dur">~25분</span></div><div class="tl-body"><div class="tl-place">강남 복귀 <span class="en">Line 2 또는 택시</span></div></div></div>
+      </div>
+
+      <h3 class="sub-h3">스팟 카드 <span class="k">— 연희·망원·서교 권역</span></h3>
+      <div class="grid" id="C-day3Grid"></div>
+
+      <h3 class="sub-h3">5/3 메모 (Trip C)</h3>
+      <div style="padding:22px;background:#fff;border:1px solid var(--line);border-radius:16px">
+        <ul>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>책바</b> = 정숙 매너 모드. 사진 X · 통화 X. 진짜 책 한 권 골라 위스키 한 잔.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>매뉴팩트 vs 피터팬</b>: 매뉴팩트는 커피, 피터팬은 빵. 둘 다 도보 5분. 사이에 사러가 쇼핑센터.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>연희 → 망원 도보</b> 추천: 5월 신록 베스트. 경의선숲길 → 연남 → 망원 일직선.</li>
+          <li style="font-size:12.5px;color:var(--ink-soft);padding:6px 0;padding-left:14px;position:relative;line-height:1.5"><span style="position:absolute;left:0;top:13px;width:5px;height:5px;border-radius:50%;background:var(--pink);display:block"></span><b>비 올 때</b>: 망원한강 X → 연희 카페 + 합정 디너 + 책바로 직행.</li>
+        </ul>
+      </div>
+    </div><!-- /panel-C-d3 -->
+
+    <!-- Trip C / Day 5 (공통) -->
+    <div class="day-panel" data-day="d5" id="panel-C-d5">
+      <div style="padding:16px 20px;background:var(--bg-soft);border-radius:12px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;border-left:4px solid var(--pink)">
+        <b>5/5 (화) 잠실 드론쇼</b>는 모든 Trip 공통. 자세한 시간대별 동선은 <b>Trip A</b>.
+      </div>
+      <div class="grid" id="C-day5Grid"></div>
+    </div>
 
   </section>
 </div>
@@ -841,6 +1151,27 @@ const SPOTS=[
   {id:46,ko:"송리단길",en:"Songridan-gil",area:"석촌호수 옆",cat:["cafe","hidden","food"],lat:37.5063,lng:127.1058,price:"카페 ₩7~10k",hours:"11:00–22:00",hook:"석촌호수 동쪽 골목. 트렌디 카페·브런치·바 클러스터. 잠실의 익선동.",glyph:"松",coverSub:"SONGRI",cover:"c-rose",mapsQ:"Songridan-gil",day5:true},
   {id:47,ko:"올림픽공원",en:"Olympic Park",area:"방이동",cat:["hidden","culture"],lat:37.5202,lng:127.1213,price:"무료",hours:"05:00–22:00",hook:"여의도 1.5배. 5월 장미축제·들꽃마루 신록. 평화의문·9경 산책 코스. 어린이날도 넓어 한적.",glyph:"○",coverSub:"OLYMPIC",cover:"c-green",mapsQ:"Olympic Park Seoul",day5:true},
   {id:48,ko:"한성백제박물관",en:"Hanseong Baekje Museum",area:"방이동",cat:["culture","hidden"],lat:37.5170,lng:127.1147,price:"무료",hours:"09:00–19:00 (월 휴)",hook:"몽촌토성 옆. 백제 500년 수도 서울의 흔적. 외국인·한국인 모두 잘 모르는 무료 박물관.",glyph:"百",coverSub:"BAEKJE",cover:"c-mono",mapsQ:"Hanseong Baekje Museum",day5:true},
+
+  // ===== Trip B 추가 (한남·해방촌·이태원·서촌·통의동·인왕산) =====
+  {id:49,ko:"리움미술관",en:"Leeum Museum",area:"한남동",cat:["culture","shop"],lat:37.5388,lng:127.0036,price:"₩20,000",hours:"10:00–18:00 (월 휴)",hook:"마리오 보타·장 누벨·렘 콜하스 3건축가 협업. 백자·고미술 + 현대미술. 사전예약.",glyph:"L",coverSub:"LEEUM",cover:"c-mono",mapsQ:"Leeum Museum"},
+  {id:50,ko:"이덴하우스",en:"Idenhouse",area:"한남동",cat:["night","food"],lat:37.5371,lng:127.0024,price:"위스키 ₩25,000~",hours:"19:00–02:00",hook:"위스키 + 시가 + 라이브 재즈. 한남 시그니처 럭셔리 바.",glyph:"ID",cover:"c-night",mapsQ:"Idenhouse Hannam"},
+  {id:51,ko:"마지셔우드",en:"Margesherwood",area:"한남동",cat:["shop","cafe"],lat:37.5365,lng:127.0017,price:"커피 ₩7,000",hours:"11:00–21:00",hook:"한국 가죽 가방 브랜드 플래그십 + 카페. 트렌디 커피 한 잔.",glyph:"M",coverSub:"MARGE",cover:"c-rose",mapsQ:"Margesherwood Hannam"},
+  {id:52,ko:"Privilege Mondrian",en:"Privilege Mondrian Itaewon",area:"이태원",cat:["night"],lat:37.5374,lng:126.9933,price:"칵테일 ₩25,000",hours:"18:00–02:00",hook:"Mondrian 호텔 옥상. 360° 도심 + 남산타워 정면. 이태원 야간 코어.",glyph:"M",coverSub:"ROOFTOP",cover:"c-night",mapsQ:"Privilege Mondrian Itaewon"},
+  {id:53,ko:"늘담",en:"Nuldam Space",area:"해방촌",cat:["cafe","night"],lat:37.5429,lng:126.9856,price:"커피 ₩7,500",hours:"11:00–22:00",hook:"한강 + 도심 + 남산타워 3방향 옥상 카페. 해방촌 시그니처.",glyph:"늘",coverSub:"NULDAM",cover:"c-night",mapsQ:"Nuldam Haebangchon"},
+  {id:54,ko:"통인시장",en:"Tongin Market",area:"서촌",cat:["food","hidden"],lat:37.5797,lng:126.9712,price:"₩5,000 (도시락)",hours:"11:00–16:00 (월 휴)",hook:"엽전으로 시장 반찬 도시락 만들기. 서촌 동네 시장의 명물.",glyph:"通",coverSub:"TONGIN",cover:"c-amber",mapsQ:"Tongin Market"},
+  {id:55,ko:"대오서점",en:"Daeo Bookstore",area:"서촌",cat:["culture","hidden"],lat:37.5832,lng:126.9700,price:"입장 ₩5,000",hours:"12:00–18:00",hook:"1951년 시작. 서울에서 가장 오래된 헌책방. 입장료 = 음료 1잔.",glyph:"大",coverSub:"BOOKS",cover:"c-mono",mapsQ:"Daeo Bookstore"},
+  {id:56,ko:"Mk2",en:"Mk2 Cafe & Bookshop",area:"통의동",cat:["cafe","hidden"],lat:37.5793,lng:126.9710,price:"커피 ₩6,000",hours:"12:00–22:00",hook:"통의동 골목 깊숙이 숨은 시네필 카페·서점.",glyph:"Mk",coverSub:"CAFE",cover:"c-mono",mapsQ:"Mk2 Tongui-dong"},
+  {id:57,ko:"청와대",en:"Cheongwadae",area:"청와대",cat:["culture","hidden"],lat:37.5868,lng:126.9750,price:"무료 (예약)",hours:"09:00–18:00",hook:"2022 일반 개방. 5월 신록 베스트. 사전예약 필수.",glyph:"靑",cover:"c-blue",mapsQ:"Cheongwadae"},
+  {id:58,ko:"윤보선 가옥",en:"Yun Posun House",area:"안국동",cat:["hanok","hidden"],lat:37.5798,lng:126.9871,price:"외관만",hours:"외관 24h",hook:"4대 대통령 가옥. 1870 고건축. 외관만 공개되지만 골목 분위기 압권.",glyph:"尹",cover:"c-mono",mapsQ:"Yun Posun House"},
+
+  // ===== Trip C 추가 (DDP·동대문·청계천·인사동·연희·홍대) =====
+  {id:59,ko:"DDP 동대문디자인플라자",en:"Dongdaemun Design Plaza",area:"동대문",cat:["culture","night","shop"],lat:37.5664,lng:127.0095,price:"무료 (전시 별도)",hours:"24h (전시 10:00–19:00)",hook:"자하 하디드 설계. LED 장미정원·야경 + 디자인 전시. 외관 그 자체가 미래.",glyph:"DDP",coverSub:"ZAHA",cover:"c-night",mapsQ:"Dongdaemun Design Plaza"},
+  {id:60,ko:"인사동 쌈지길",en:"Insadong Ssamzigil",area:"인사동",cat:["shop","hanok"],lat:37.5734,lng:126.9851,price:"무료 입장",hours:"10:30–20:30",hook:"4층 나선형 골목 쇼핑. 한국 디자이너 + 전통공예. 옥상 정원 + 사진 스팟.",glyph:"S",coverSub:"SSAMZIE",cover:"c-amber",mapsQ:"Ssamzigil Insadong"},
+  {id:61,ko:"청계천",en:"Cheonggyecheon",area:"종로·중구",cat:["night","hidden"],lat:37.5694,lng:126.9784,price:"무료",hours:"24h",hook:"도심 한복판 5.8km 산책로. 야경 + 분수.",glyph:"川",cover:"c-blue",mapsQ:"Cheonggyecheon"},
+  {id:62,ko:"매뉴팩트 커피",en:"Manufact Coffee Roasters",area:"연희동",cat:["cafe","hidden"],lat:37.5697,lng:126.9301,price:"커피 ₩6,500",hours:"10:00–22:00",hook:"챔피언 바리스타 로스터리. 연희동 조용한 골목.",glyph:"MF",coverSub:"COFFEE",cover:"c-mono",mapsQ:"Manufact Coffee"},
+  {id:63,ko:"피터팬 1978",en:"Peterpan 1978",area:"연희동",cat:["cafe","food"],lat:37.5713,lng:126.9314,price:"빵 ₩4,000~6,000",hours:"08:00–22:00",hook:"1978 시작. 연희동 변천사를 함께한 베이커리.",glyph:"PP",coverSub:"BAKERY",cover:"c-amber",mapsQ:"Peterpan 1978"},
+  {id:64,ko:"홍대 자유시장",en:"Hongdae Free Market",area:"홍대",cat:["hidden","shop"],lat:37.5556,lng:126.9237,price:"무료 입장",hours:"매주 토 13:00–18:00",hook:"홍대 놀이터 핸드메이드 마켓. 5/2 (토) 운영.",glyph:"FM",coverSub:"HONGDAE",cover:"c-rose",badge:"5/2 토만",mapsQ:"Hongdae Free Market"},
+  {id:65,ko:"책바",en:"Book by Book",area:"서교동",cat:["night","cafe"],lat:37.5523,lng:126.9215,price:"입장 ₩10,000 + 음료",hours:"19:00–02:00",hook:"책 + 위스키 컨셉 바. 정숙 모드. 한 권 골라 한 잔.",glyph:"冊",coverSub:"BOOKBAR",cover:"c-night",mapsQ:"Book by Book Seogyo"},
 ];
 
 // ──────────────────────────────────────────
@@ -896,26 +1227,48 @@ document.getElementById("catChips").addEventListener("click",e=>{
   applyFilter(btn.dataset.cat);
 });
 
-// Day grids — render by day-flag fields
-const DAY_FILTERS={
-  day1:s=>s.day1===true,
-  day2:s=>[20,21,22,23,24,25,26,18,19,10,11,12,13,14,15,16,17].includes(s.id),
-  day3:s=>[27,28,29,30,31].includes(s.id),
-  day5:s=>s.day5===true||[35,36].includes(s.id)
+// ─────────────────────────────────────────────────
+// Day grids per Trip
+// ─────────────────────────────────────────────────
+const TRIP_GRIDS={
+  // Trip A (current)
+  "day1Grid":[1,2,3,4,5,6,7,8,9],
+  "day2Grid":[20,21,22,23,24,25,26,18,19,10,11,12,13,14,15,16,17],
+  "day3Grid":[27,28,29,30,31],
+  "day5Grid":[43,44,45,46,47,48,35,36],
+  // Trip B
+  "B-day1Grid":[1,2,3,4,5,6,7,8,9],
+  "B-day2Grid":[49,50,51,52,53,32,33,34],
+  "B-day3Grid":[54,55,56,57,58,21,22],
+  "B-day5Grid":[43,44,45,46,47,48],
+  // Trip C
+  "C-day1Grid":[1,2,3,4,5,6,7,8,9],
+  "C-day2Grid":[59,60,61,41,18,19,10,11,12,14,15,16],
+  "C-day3Grid":[62,63,30,31,29,27,65],
+  "C-day5Grid":[43,44,45,46,47,48]
 };
-["day1","day2","day3","day5"].forEach(d=>{
-  const el=document.getElementById(d+"Grid");
-  if(el)el.innerHTML=SPOTS.filter(DAY_FILTERS[d]).map(s=>renderCard(s)).join("");
+Object.entries(TRIP_GRIDS).forEach(([gridId,ids])=>{
+  const el=document.getElementById(gridId);
+  if(!el)return;
+  const list=ids.map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean);
+  el.innerHTML=list.map(s=>renderCard(s)).join("");
 });
 
-// Day pill switcher (within Itinerary tab)
-document.getElementById("dayPills").addEventListener("click",e=>{
-  const btn=e.target.closest(".day-pill");if(!btn)return;
-  document.querySelectorAll("#dayPills .day-pill").forEach(p=>p.classList.remove("active"));
-  btn.classList.add("active");
-  document.querySelectorAll(".day-panel").forEach(p=>p.classList.remove("active"));
-  document.getElementById("panel-"+btn.dataset.day).classList.add("active");
-  window.scrollTo({top:document.getElementById("tab-itin").offsetTop-60,behavior:"smooth"});
+// ─────────────────────────────────────────────────
+// Day pill switcher — works for any trip tab
+// ─────────────────────────────────────────────────
+document.querySelectorAll(".day-pills").forEach(pillsContainer=>{
+  pillsContainer.addEventListener("click",e=>{
+    const btn=e.target.closest(".day-pill");if(!btn)return;
+    pillsContainer.querySelectorAll(".day-pill").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    const trip=pillsContainer.dataset.trip;
+    const day=btn.dataset.day;
+    // Find the parent tab-content and switch its panels
+    const tabContent=pillsContainer.closest(".tab-content");
+    tabContent.querySelectorAll(".day-panel").forEach(p=>p.classList.toggle("active",p.dataset.day===day));
+    window.scrollTo({top:tabContent.offsetTop-60,behavior:"smooth"});
+  });
 });
 
 // ──────────────────────────────────────────
